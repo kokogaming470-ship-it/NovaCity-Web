@@ -29,7 +29,6 @@
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
             user-select: none;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         body {
@@ -61,7 +60,7 @@
             align-items: center;
             opacity: 1;
             visibility: visible;
-            transition: opacity 1s ease, visibility 1s ease;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #site-main-intro.fade-out {
@@ -71,7 +70,7 @@
 
         .intro-content-box {
             text-align: center;
-            animation: introZoom 3.5s ease-in-out forwards;
+            animation: introZoom 3.5s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards;
         }
 
         .intro-logo-glow {
@@ -94,9 +93,9 @@
         }
 
         @keyframes introZoom {
-            0% { transform: scale(0.7); opacity: 0; filter: blur(10px); }
-            50% { transform: scale(1.05); opacity: 1; filter: blur(0px); }
-            85% { transform: scale(1); opacity: 1; filter: blur(0px); }
+            0% { transform: scale(0.6); opacity: 0; filter: blur(12px); }
+            40% { transform: scale(1.05); opacity: 1; filter: blur(0px); }
+            80% { transform: scale(1); opacity: 1; filter: blur(0px); }
             100% { transform: scale(1.15); opacity: 0; filter: blur(15px); }
         }
 
@@ -111,7 +110,7 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.6s ease;
         }
 
         #admin-intro-overlay.active {
@@ -132,6 +131,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .logo-text {
@@ -153,21 +153,24 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             overflow-x: auto;
             max-width: 100%;
+            scrollbar-width: none; /* Firefox */
         }
+        nav::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
         .nav-btn {
-            padding: 8px 14px;
+            padding: 9px 16px;
             border: none;
             background: transparent;
             color: #b0b0d0;
             font-weight: 700;
-            font-size: 0.85rem;
-            border-radius: 10px;
+            font-size: 0.88rem;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .nav-btn:hover, .nav-btn.active {
@@ -188,21 +191,22 @@
             background: linear-gradient(135deg, #5865F2 0%, #404EED 100%);
             color: #fff;
             border: none;
-            padding: 9px 18px;
-            border-radius: 12px;
+            padding: 10px 20px;
+            border-radius: 14px;
             font-weight: 800;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
             white-space: nowrap;
+            transition: all 0.3s ease;
         }
 
         .btn-auth:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(88, 101, 242, 0.8);
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.8);
         }
 
         .user-profile-badge {
@@ -213,14 +217,21 @@
             border: 1px solid rgba(88, 101, 242, 0.5);
             padding: 6px 14px;
             border-radius: 30px;
+            animation: fadeInBadge 0.5s ease;
+        }
+
+        @keyframes fadeInBadge {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             border: 2px solid var(--purple-glow);
             object-fit: cover;
+            box-shadow: 0 0 10px var(--purple-glow);
         }
 
         .user-name {
@@ -233,12 +244,12 @@
             background: rgba(231, 76, 60, 0.2);
             border: 1px solid var(--danger-color);
             color: var(--danger-color);
-            padding: 4px 10px;
+            padding: 5px 10px;
             border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 800;
             cursor: pointer;
-            margin-right: 5px;
+            transition: all 0.2s ease;
         }
 
         .btn-logout:hover {
@@ -273,11 +284,16 @@
             width: 90%;
             max-width: 420px;
             box-shadow: 0 0 50px rgba(140, 82, 255, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
         }
 
         /* Main Container */
         main {
-            margin-top: 100px;
+            margin-top: 110px;
             padding: 20px 15px;
             min-height: calc(100vh - 180px);
             max-width: 1250px;
@@ -288,27 +304,29 @@
         .page-section { display: none; }
         .page-section.active {
             display: block;
-            animation: sectionFade 0.5s ease forwards;
+            animation: sectionFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
         @keyframes sectionFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(25px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .interactive-card {
             background: var(--bg-card);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 25px;
+            padding: 28px;
             margin-bottom: 25px;
             backdrop-filter: blur(15px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .interactive-card:hover {
             border-color: var(--purple-glow);
-            box-shadow: 0 0 35px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.35);
+            transform: translateY(-3px);
         }
 
         /* Discord Support Button */
@@ -318,19 +336,20 @@
             gap: 12px;
             background: linear-gradient(135deg, #5865F2 0%, #ff007f 100%);
             color: #fff;
-            padding: 14px 28px;
+            padding: 15px 32px;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 800;
             text-decoration: none;
             margin-top: 25px;
-            box-shadow: 0 0 25px rgba(88, 101, 242, 0.6);
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
 
         .btn-discord-support:hover {
-            transform: scale(1.08) translateY(-3px);
-            box-shadow: 0 0 40px rgba(255, 0, 127, 0.8);
+            transform: scale(1.08) translateY(-4px);
+            box-shadow: 0 0 45px rgba(255, 0, 127, 0.85);
         }
 
         .form-group { margin-bottom: 18px; }
@@ -344,13 +363,18 @@
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 13px 16px;
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: 14px;
             color: #fff;
             font-size: 0.95rem;
             outline: none;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--purple-glow);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
 
         .btn-action-submit {
@@ -359,20 +383,21 @@
             background: linear-gradient(135deg, var(--purple-primary) 0%, #ff007f 100%);
             color: #fff;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 1rem;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(140, 82, 255, 0.4);
+            box-shadow: 0 5px 25px rgba(140, 82, 255, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            transition: all 0.3s ease;
         }
 
         .btn-action-submit:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.7);
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.75);
         }
 
         /* Split Admin Panel Grid */
@@ -409,6 +434,10 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 16px;
+            transition: all 0.3s ease;
+        }
+        .ticket-card:hover {
+            border-color: var(--purple-glow);
         }
 
         .ticket-header {
@@ -451,7 +480,9 @@
 
         .btn-close-ticket {
             background: var(--danger-color); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; margin-top: 10px; width: 100%;
+            transition: background 0.3s ease;
         }
+        .btn-close-ticket:hover { background: #c0392b; }
 
         .media-grid {
             display: grid;
@@ -465,25 +496,30 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             overflow: hidden;
+            transition: transform 0.3s ease;
         }
+        .media-item-card:hover { transform: translateY(-5px); }
 
         .media-item-card img, .media-item-card video {
             width: 100%; height: 180px; object-fit: cover;
         }
 
-        /* Mobile Optimization Rules */
+        /* Mobile Responsive Magic */
         @media (max-width: 850px) {
-            header { flex-direction: column; align-items: stretch; text-align: center; }
-            nav { justify-content: flex-start; }
+            header { flex-direction: column; align-items: stretch; text-align: center; padding: 10px; }
+            nav { justify-content: flex-start; padding: 4px; }
+            .nav-btn { padding: 8px 12px; font-size: 0.82rem; }
             .admin-split-grid { grid-template-columns: 1fr; }
             .intro-logo-glow { font-size: 2.3rem; }
             .intro-sub-text { font-size: 1rem; }
-            .auth-container { justify-content: center; }
+            .auth-container { justify-content: center; width: 100%; }
+            .btn-auth { width: 100%; justify-content: center; }
+            main { margin-top: 145px; padding: 12px 10px; }
         }
 
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 25px;
             border-top: 1px solid var(--glass-border);
             background: rgba(3, 1, 8, 0.95);
             margin-top: 40px;
@@ -505,7 +541,7 @@
 
     <!-- Admin Intro Overlay -->
     <div id="admin-intro-overlay">
-        <div style="font-size: 2.8rem; font-weight: 900; color: var(--purple-glow); text-shadow: 0 0 30px var(--pink-glow);">WELCOME TO NOVA CITY CONTROL PANEL</div>
+        <div style="font-size: 2.6rem; font-weight: 900; color: var(--purple-glow); text-shadow: 0 0 30px var(--pink-glow); text-align: center; padding: 0 15px;">WELCOME TO NOVA CITY CONTROL PANEL</div>
         <p style="color: #fff; margin-top: 15px; font-weight: 700;">جاري تحميل نظام الإدارة العليا...</p>
     </div>
 
@@ -821,7 +857,7 @@
             animate();
         }
 
-        /* Real Discord OAuth2 Login Engine */
+        /* Real Discord OAuth2 Login Engine (Official Connection) */
         function redirectToDiscordOAuth() {
             const scope = encodeURIComponent('identify guilds.join');
             const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=${scope}`;
@@ -927,7 +963,7 @@
         }
 
         function renderSiteContent() {
-            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules}</p>`;
+            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px; line-height:1.8;">${state.siteData.rules}</p>`;
             document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px; font-size:1.05rem; line-height:1.8;">${state.siteData.info}</p>`;
             document.getElementById('edit-rules-input').value = state.siteData.rules;
             document.getElementById('edit-info-input').value = state.siteData.info;
@@ -966,7 +1002,7 @@
 
             state.tutorials.forEach(m => {
                 const mediaHtml = m.isVideo ? `<video src="${m.url}" controls></video>` : `<img src="${m.url}" alt="${m.title}">`;
-                container.innerHTML += `<div class="media-item-card">${mediaHtml}<div style="padding:12px;"><h4 style="color:#fff;">${m.title}</h4></div></div>`;
+                container.innerHTML += `<div class="media-item-card">${mediaHtml}<div style="padding:14px;"><h4 style="color:#fff;">${m.title}</h4></div></div>`;
             });
         }
 
@@ -1059,8 +1095,8 @@
                         <p style="font-size:0.9rem; margin-bottom:8px;"><strong>الوصف:</strong> ${t.details}</p>
                         <div class="chat-thread-box">${repliesHtml || '<p style="color:#777; font-size:0.8rem;">لا توجد ردود بعد.</p>'}</div>
                         <div style="display:flex; gap:8px; margin-top:8px;">
-                            <input type="text" id="user-reply-${t.id}" placeholder="اكتب ردك هنا..." style="padding:6px; background:#000; border:1px solid var(--glass-border); border-radius:6px; color:#fff; flex:1;">
-                            <button onclick="sendReply('${t.id}', false)" style="background:var(--purple-primary); color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">إرسال</button>
+                            <input type="text" id="user-reply-${t.id}" placeholder="اكتب ردك هنا..." style="padding:8px; background:#000; border:1px solid var(--glass-border); border-radius:8px; color:#fff; flex:1;">
+                            <button onclick="sendReply('${t.id}', false)" style="background:var(--purple-primary); color:#fff; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:700;">إرسال</button>
                         </div>
                     </div>`;
             });
@@ -1169,8 +1205,8 @@
                         <p style="font-size:0.88rem; margin-bottom:8px;"><strong>الوصف:</strong> ${t.details}</p>
                         <div class="chat-thread-box">${repliesHtml || '<p style="color:#777; font-size:0.8rem;">لا توجد ردود بعد.</p>'}</div>
                         <div style="display:flex; gap:8px; margin-top:8px;">
-                            <input type="text" id="admin-reply-${t.id}" placeholder="رد كـ أدمن..." style="padding:6px; background:#000; border:1px solid var(--glass-border); border-radius:6px; color:#fff; flex:1;">
-                            <button onclick="sendReply('${t.id}', true)" style="background:var(--purple-primary); color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">رد</button>
+                            <input type="text" id="admin-reply-${t.id}" placeholder="رد كـ أدمن..." style="padding:8px; background:#000; border:1px solid var(--glass-border); border-radius:8px; color:#fff; flex:1;">
+                            <button onclick="sendReply('${t.id}', true)" style="background:var(--purple-primary); color:#fff; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-weight:700;">رد</button>
                         </div>
                         <button class="btn-close-ticket" onclick="closeAndArchiveTicket('${t.id}', 'general')"><i class="fa-solid fa-lock"></i> إغلاق التذكرة وأرشفتها</button>
                     </div>`;
@@ -1208,7 +1244,6 @@
         async function sendAdminWebhookMsg() {
             if (!state.isAdmin) return;
             const webhookUrl = document.getElementById('custom-webhook-url').value.trim();
-do {
             const title = document.getElementById('bot-msg-title').value.trim();
             const content = document.getElementById('bot-msg-content').value.trim();
 
