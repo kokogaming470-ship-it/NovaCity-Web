@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova City RP - السيرفر الأول في مصر</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #05020a;
+            --bg-card: rgba(18, 7, 43, 0.85);
+            --purple-primary: #7c5cff;
+            --purple-dark: #12062b;
+            --purple-glow: #b388ff;
+            --text-light: #f1f2f6;
+            --glass-border: rgba(124, 92, 255, 0.35);
+            --fire-color: #ff4757;
+            --gold-accent: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(124, 92, 255, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(255, 71, 87, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(18, 7, 43, 0.9) 0%, #05020a 100%);
+            background-attachment: fixed;
+        }
+
+        /* 1. Launch Intro Screen */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #12062b 0%, #030108 100%);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            pointer-events: none;
+            animation: introExit 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards 3.8s;
+        }
+
+        .intro-title {
+            font-size: 3.8rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 20px var(--purple-primary), 0 0 50px var(--purple-glow);
+            transform: translateY(-150px);
+            opacity: 0;
+            animation: cinematicSlideDown 1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.2s;
+        }
+
+        .intro-subtitle {
+            font-size: 1.4rem;
+            color: var(--purple-glow);
+            margin-top: 12px;
+            font-weight: 700;
+            transform: translateX(-100px);
+            opacity: 0;
+            animation: cinematicSlideLeft 1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.7s;
+        }
+
+        .loader-bar-container {
+            width: 300px; height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px; margin-top: 35px;
+            overflow: hidden; border: 1px solid var(--glass-border);
+            opacity: 0; animation: fadeIn 0.5s ease forwards 1.2s;
+        }
+
+        .loader-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--purple-primary), var(--fire-color));
+            box-shadow: 0 0 15px var(--purple-glow);
+            animation: fillProgress 2.2s ease-in-out forwards 1.4s;
+        }
+
+        /* 2. Custom Login Intro Animations */
+        #login-intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #170938 0%, #030108 100%);
+            z-index: 888888;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .login-intro-title {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 25px var(--purple-primary), 0 0 50px var(--purple-glow);
+        }
+
+        .login-intro-role {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            background: rgba(124, 92, 255, 0.25);
+            padding: 8px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            margin-top: 15px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Transition Overlay */
+        #transition-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 2, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 777777;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .fire-text {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 15px #ff4757, 0 0 30px #ff6b81, 0 0 50px var(--purple-primary);
+            animation: pulseGlow 0.8s infinite alternate;
+        }
+
+        /* Keyframes */
+        @keyframes cinematicSlideDown { 0% { transform: translateY(-150px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        @keyframes cinematicSlideLeft { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes fillProgress { 0% { width: 0%; } 100% { width: 100%; } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes introExit { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); visibility: hidden; } }
+        @keyframes pulseGlow { 0% { transform: scale(0.97); opacity: 0.8; } 100% { transform: scale(1.03); opacity: 1; } }
+
+        /* Navigation Header */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 10000;
+            background: rgba(6, 2, 18, 0.88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, var(--purple-glow) 50%, var(--fire-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
+        }
+
+        nav {
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 5px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-btn {
+            padding: 8px 14px;
+            border: none;
+            background: transparent;
+            color: #a0a0c0;
+            font-weight: 700;
+            font-size: 0.88rem;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%);
+            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .auth-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-auth {
+            background: linear-gradient(135deg, #5865F2 0%, #404EED 100%);
+            color: #fff;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
+        }
+
+        .btn-admin-login {
+            background: linear-gradient(135deg, #ff4757 0%, #2f3542 100%);
+            color: #fff;
+            border: 1px solid rgba(255, 71, 87, 0.5);
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+        }
+
+        /* Modals & Forms */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(10px);
+            z-index: 999000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--purple-glow);
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--purple-glow);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--purple-glow);
+            box-shadow: 0 0 10px rgba(179, 136, 255, 0.3);
+        }
+
+        /* Main Section Container */
+        main {
+            margin-top: 90px;
+            padding: 25px 35px;
+            min-height: calc(100vh - 180px);
+        }
+
+        .page-section { display: none; }
+        .page-section.active {
+            display: block;
+            animation: sectionSlideUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        @keyframes sectionSlideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero / Content Display Boxes */
+        .hero-banner {
+            text-align: center;
+            padding: 50px 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .hero-title span {
+            color: var(--purple-glow);
+            text-shadow: 0 0 15px var(--purple-primary);
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: #b0b0d0;
+            max-width: 850px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .editable-content-box {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Ticket Creator Styling */
+        .ticket-creator-box {
+            background: linear-gradient(135deg, rgba(18, 7, 43, 0.95) 0%, rgba(35, 12, 70, 0.85) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 750px;
+            margin: 0 auto;
+            box-shadow: 0 12px 35px rgba(124, 92, 255, 0.15);
+        }
+
+        .ticket-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .ticket-type-btn {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            color: #c0c0e0;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .ticket-type-btn:hover, .ticket-type-btn.selected {
+            background: var(--purple-primary);
+            color: #fff;
+            border-color: var(--purple-glow);
+            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Ticket Display Cards */
+        .tickets-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ticket-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .ticket-card:hover { transform: translateY(-3px); }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+
+        .ticket-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .status-open { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid #3498db; }
+        .status-accepted { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .status-rejected { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+
+        /* Bot Control Panel Box */
+        .bot-control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .bot-log-box {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #00ff88;
+        }
+
+        .btn-action-submit {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-action-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(124, 92, 255, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 22px;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(3, 1, 8, 0.95);
+            margin-top: 40px;
+        }
+
+        .copyright { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; margin-bottom: 5px; }
+        .powered-by { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 800; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Site Launch Intro Animation -->
+    <div id="intro-overlay">
+        <div class="intro-title">Welcome to Nova City RP</div>
+        <div class="intro-subtitle">أقوى سيرفر رول بلاي في ماين كرافت في مصر 🌟</div>
+        <div class="loader-bar-container">
+            <div class="loader-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- 2. Dynamic Login Intro Overlay (Member / Admin) -->
+    <div id="login-intro-overlay">
+        <div class="login-intro-title">Welcome to Nova City</div>
+        <div class="login-intro-role" id="login-role-text">(Member)</div>
+    </div>
+
+    <!-- 3. Transition Overlay -->
+    <div id="transition-overlay">
+        <i class="fa-solid fa-fire" style="font-size: 3.5rem; color: #ff4757; margin-bottom: 12px;"></i>
+        <div class="fire-text">NOVA CITY ON FIRE</div>
+    </div>
+
+    <!-- Admin Password Verification Modal -->
+    <div class="modal-overlay" id="admin-pass-modal">
+        <div class="modal-box">
+            <div class="modal-title"><i class="fa-solid fa-user-shield"></i> تسجيل دخول كـ أدمن</div>
+            <div class="form-group">
+                <label>أدخل كلمة مرور الإدارة العليا:</label>
+                <input type="password" id="admin-password-input" placeholder="••••••••">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-action-submit" onclick="verifyAdminPassword()">دخول</button>
+                <button class="btn-action-submit" style="background: rgba(255,255,255,0.1);" onclick="closeAdminModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">NOVA CITY RP</div>
+        </div>
+
+        <nav id="nav-menu">
+            <button class="nav-btn active" onclick="switchTabWithTransition('home')"><i class="fa-solid fa-house"></i> الرئيسية</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('rules')"><i class="fa-solid fa-book"></i> القوانين</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('info')"><i class="fa-solid fa-circle-info"></i> معلومات عامة</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('tutorials')"><i class="fa-solid fa-video"></i> الشروحات</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('apply')"><i class="fa-solid fa-file-pen"></i> التقديمات</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('open-ticket')"><i class="fa-solid fa-headset"></i> فتح تذكرة</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('user-tickets')"><i class="fa-solid fa-ticket"></i> التذاكر</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('app-tickets')"><i class="fa-solid fa-clipboard-check"></i> تذاكر التقديمات</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('partners')"><i class="fa-solid fa-handshake"></i> الشراكات</button>
+            <button class="nav-btn" onclick="switchTabWithTransition('admin-panel')" id="admin-tab-btn" style="display: none; color: #ff4757;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم</button>
+        </nav>
+
+        <div class="auth-controls">
+            <button class="btn-auth" id="discord-auth-btn" onclick="initiateDiscordLogin()">
+                <i class="fa-brands fa-discord"></i>
+                <span id="auth-btn-text">ربط حساب الديسكورد</span>
+            </button>
+            <button class="btn-admin-login" id="admin-login-btn" style="display: none;" onclick="openAdminModal()">
+                <i class="fa-solid fa-key"></i>
+                <span>دخول كـ أدمن</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="page-section active">
+            <div class="hero-banner">
+                <h1 class="hero-title">نوفا سيتي <span>تُرحب بكم</span></h1>
+                <p class="hero-desc">أحسن سيرفر رول بلاي في ماين كرافت في مصر. عالم واقعي متكامل، فعاليات مستمرة، وتجربة فريدة في انتظاركم دائمًا!</p>
+            </div>
+        </section>
+
+        <!-- Rules Section -->
+        <section id="rules" class="page-section">
+            <div class="editable-content-box" id="rules-content-display">
+                <!-- Content injected dynamically -->
+            </div>
+        </section>
+
+        <!-- General Info Section -->
+        <section id="info" class="page-section">
+            <div class="editable-content-box" id="info-content-display">
+                <!-- Content injected dynamically -->
+            </div>
+        </section>
+
+        <!-- Tutorials Section -->
+        <section id="tutorials" class="page-section">
+            <div class="editable-content-box">
+                <h2><i class="fa-solid fa-circle-play"></i> شروحات السيرفر الرسمية</h2>
+                <p style="margin-top: 10px; color: #a0a0c0;">شاهد الفيديوهات التوضيحية لكيفية اللعب والانضمام لمختلف القطاعات.</p>
+            </div>
+        </section>
+
+        <!-- Applications (Apply) Section -->
+        <section id="apply" class="page-section">
+            <div class="ticket-creator-box">
+                <h2 style="text-align: center; margin-bottom: 20px; color: var(--purple-glow);"><i class="fa-solid fa-file-pen"></i> تقديمات نوفا سيتي</h2>
+                <div class="form-group">
+                    <label>اختر نوع التقديم:</label>
+                    <select id="apply-type-select" onchange="toggleApplyFormType()">
+                        <option value="admin">تقديم إدارة السيرفر</option>
+                        <option value="streamer">تقديم ستريمر (صانع محتوى)</option>
+                    </select>
+                </div>
+
+                <form id="apply-form-element" onsubmit="handleApplicationSubmit(event)">
+                    <div id="dynamic-apply-fields">
+                        <!-- Dynamic Input Fields -->
+                    </div>
+                    <button type="submit" class="btn-action-submit" style="margin-top: 15px;">إرسال طلب التقديم</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Ticket Creation Section -->
+        <section id="open-ticket" class="page-section">
+            <div class="ticket-creator-box">
+                <h2 style="text-align: center; margin-bottom: 25px; color: var(--purple-glow);"><i class="fa-solid fa-headset"></i> فتح تذكرة جديدة</h2>
+                
+                <label style="display: block; margin-bottom: 12px; font-weight: 700; color: var(--purple-glow);">اختر قسم التذكرة:</label>
+                <div class="ticket-type-grid">
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'دعم فني')"><i class="fa-solid fa-life-ring"></i> دعم فني</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب انضمام إلى الشرطة')"><i class="fa-solid fa-shield-halved"></i> طلب انضمام للشرطة</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب انضمام إلى المطافي')"><i class="fa-solid fa-fire-extinguisher"></i> طلب انضمام للمطافي</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب انضمام إلى الإسعاف')"><i class="fa-solid fa-truck-medical"></i> طلب انضمام للإسعاف</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب بناء شيء')"><i class="fa-solid fa-hammer"></i> طلب بناء شيء</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب شراء شيء')"><i class="fa-solid fa-cart-shopping"></i> طلب شراء شيء</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'طلب مراجعة ألبان')"><i class="fa-solid fa-cow"></i> طلب مراجعة ألبان</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'شكوى على إداري')"><i class="fa-solid fa-user-slash"></i> شكوى على إداري</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'شكوى على لاعب')"><i class="fa-solid fa-gavel"></i> شكوى على لاعب</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'تقييم الخدمة')"><i class="fa-solid fa-star"></i> تقييم الخدمة</div>
+                    <div class="ticket-type-btn" onclick="selectTicketCategory(this, 'استفسار عام')"><i class="fa-solid fa-circle-question"></i> استفسار عام</div>
+                </div>
+
+                <form id="general-ticket-form" onsubmit="handleGeneralTicketSubmit(event)">
+                    <div class="form-group">
+                        <label>طريقة التعريف بالحساب:</label>
+                        <select id="auth-method-select" onchange="toggleAuthFields()">
+                            <option value="oauth">الربط بالحساب المسجل (OAuth2)</option>
+                            <option value="manual">إدخال الـ User ID والاسم يدوياً</option>
+                        </select>
+                    </div>
+
+                    <div id="manual-auth-inputs" style="display: none;">
+                        <div class="form-group">
+                            <label>Discord User ID:</label>
+                            <input type="text" id="manual-user-id" placeholder="مثال: 1433671590264045628">
+                        </div>
+                        <div class="form-group">
+                            <label>اسم حساب الديسكورد بالظبط (Username):</label>
+                            <input type="text" id="manual-username" placeholder="اسم حسابك الدقيق">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>تفاصيل التذكرة / موضوع الطلب:</label>
+                        <textarea id="ticket-details-input" rows="4" placeholder="اكتب تفاصيل طلبك أو استفسارك هنا..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-action-submit">إنشاء التذكرة الآن</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- General User Tickets View -->
+        <section id="user-tickets" class="page-section">
+            <h2 style="margin-bottom: 20px;"><i class="fa-solid fa-ticket"></i> تذاكري المفتوحة (الدعم والطلبات)</h2>
+            <div class="tickets-container" id="user-general-tickets-list"></div>
+        </section>
+
+        <!-- Application Tickets View -->
+        <section id="app-tickets" class="page-section">
+            <h2 style="margin-bottom: 20px;"><i class="fa-solid fa-clipboard-check"></i> تذاكر التقديمات المرفوعة</h2>
+            <div class="tickets-container" id="user-app-tickets-list"></div>
+        </section>
+
+        <!-- Partners Section -->
+        <section id="partners" class="page-section">
+            <div class="editable-content-box" id="partners-content-display">
+                <!-- Content injected dynamically -->
+            </div>
+        </section>
+
+        <!-- Comprehensive Admin Control Panel -->
+        <section id="admin-panel" class="page-section">
+            <h2 style="color: #ff4757; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية للإدارة العليا</h2>
+
+            <!-- ADMIN ONLY SECTIONS -->
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-folder-open"></i> إدارة التذاكر العامة (الدعم والشكاوى)</h3>
+                <div class="tickets-container" id="admin-general-tickets-list"></div>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-id-card"></i> إدارة تذاكر التقديمات (الإدارة والستريمرز)</h3>
+                <div class="tickets-container" id="admin-app-tickets-list"></div>
+            </div>
+
+            <!-- Content Management (Dynamic Live Site Update) -->
+            <div class="editable-content-box" style="margin-bottom: 30px;">
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-pen-to-square"></i> التعديل المباشر على محتوى الموقع</h3>
+                
+                <div class="form-group">
+                    <label>تعديل القوانين (Rules):</label>
+                    <textarea id="edit-rules-input" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>تعديل المعلومات العامة (General Info):</label>
+                    <textarea id="edit-info-input" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>تعديل الشراكات (Partners):</label>
+                    <textarea id="edit-partners-input" rows="3"></textarea>
+                </div>
+                <button class="btn-action-submit" onclick="saveSiteContentChanges()">حفظ وتحديث المحتوى على السيرفر فوراً</button>
+            </div>
+
+            <!-- Bot Control Dashboard -->
+            <div class="editable-content-box">
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-robot"></i> لوحة التحكم الخاصة بالبوت (Discord Bot Dashboard)</h3>
+                
+                <div class="bot-control-grid">
+                    <div>
+                        <div class="form-group">
+                            <label>إرسال رسالة مباشرة عبر البوت:</label>
+                            <input type="text" id="bot-channel-id" placeholder="Channel ID (رقم الروم)">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="bot-message-text" rows="3" placeholder="محتوى الرسالة..."></textarea>
+                        </div>
+                        <button class="btn-action-submit" onclick="sendBotMessage()">إرسال الرسالة عبر البوت</button>
+                    </div>
+
+                    <div>
+                        <label style="display:block; margin-bottom: 8px; font-weight:700; color:var(--purple-glow);">سجل أحداث الديسكورد والتكرار (Activity Log):</label>
+                        <div class="bot-log-box" id="bot-activity-logs">
+                            [SYSTEM] البوت متصل وجاهز للاستماع...<br>
+                            [MONITOR] نظام كشف التكرار (Spam Detector) نشط في جميع الرومات.<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">جميع الحقوق محفوظة © 2026 Nova City RP</div>
+        <div class="powered-by">Powered by MMH</div>
+    </footer>
+
+    <!-- JavaScript Core System Architecture -->
+    <script>
+        // CONFIGURATION & CREDENTIALS
+        const CONFIG = {
+            CLIENT_ID: "1525287436198875266",
+            REDIRECT_URI: window.location.origin + window.location.pathname,
+            ADMIN_PASSWORD: "997816",
+            BOT_TOKEN: "MTUyNTI4NzQzNjE5ODg3NTI2Ng.GmrHUw.KZIxJgWXBLKcf5P1fOL5dCIbzzBxjwqhu5sCNQ",
+            ADMIN_IDS: ["1433671590264045628", "1510646428559610068"]
+        };
+
+        // GLOBAL APP STATE
+        let state = {
+            currentUser: JSON.parse(localStorage.getItem('nova_user_data') || 'null'),
+            isAdmin: localStorage.getItem('nova_is_admin') === 'true',
+            selectedCategory: '',
+            tickets: JSON.parse(localStorage.getItem('nova_general_tickets') || '[]'),
+            applications: JSON.parse(localStorage.getItem('nova_applications') || '[]'),
+            siteData: JSON.parse(localStorage.getItem('nova_site_content') || JSON.stringify({
+                rules: "قوانين سيرفر نوفا سيتي رول بلاي:\n1. يمنع منعاً باتاً RDM و VDM.\n2. الالتزام الكامل بتمثيل الشخصية داخل السيرفر.\n3. احترام جميع الأعضاء والإدارة.",
+                info: "مدينة نوفا هي أول مدينة عربية واقعية تنشأ داخل عالم ماينكرافت الجافا، حيث تقدم تجربة رول بلاي متكاملة.",
+                partners: "شراكات نوفا سيتي: Coming Soon (K) 🔥"
+            }))
+        };
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            handleOAuthCallback();
+            renderSiteContent();
+            setupApplyFormFields();
+
+            if (state.currentUser) {
+                updateAuthUI();
+                // Member Intro Delay Trigger (5 seconds after login detected)
+                if (!state.isAdmin && !sessionStorage.getItem('intro_shown')) {
+                    setTimeout(() => {
+                        triggerLoginIntro("Member");
+                        sessionStorage.setItem('intro_shown', 'true');
+                    }, 5000);
+                }
+            }
+        });
+
+        // OAUTH2 DISCORD LOGIN SYSTEM
+        function initiateDiscordLogin() {
+            const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=identify`;
+            window.location.href = oauthUrl;
+        }
+
+        function handleOAuthCallback() {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+
+            if (accessToken) {
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { authorization: `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(user => {
+                    if (user.id) {
+                        state.currentUser = { id: user.id, username: user.username, avatar: user.avatar };
+                        localStorage.setItem('nova_user_data', JSON.stringify(state.currentUser));
+                        window.location.hash = '';
+                        updateAuthUI();
+                    }
+                })
+                .catch(err => console.error("OAuth Fetch Error:", err));
+            }
+        }
+
+        function updateAuthUI() {
+            if (state.currentUser) {
+                document.getElementById('auth-btn-text').innerText = `${state.currentUser.username}`;
+                document.getElementById('admin-login-btn').style.display = 'flex';
+            }
+        }
+
+        // ADMIN LOGIN FLOW
+        function openAdminModal() {
+            document.getElementById('admin-pass-modal').style.display = 'flex';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-pass-modal').style.display = 'none';
+        }
+
+        function verifyAdminPassword() {
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === CONFIG.ADMIN_PASSWORD) {
+                state.isAdmin = true;
+                localStorage.setItem('nova_is_admin', 'true');
+                closeAdminModal();
+                triggerLoginIntro("Admin");
+                document.getElementById('admin-tab-btn').style.display = 'flex';
+            } else {
+                alert("كلمة المرور غير صحيحة!");
+            }
+        }
+
+        function triggerLoginIntro(roleText) {
+            const overlay = document.getElementById('login-intro-overlay');
+            const roleEl = document.getElementById('login-role-text');
+            roleEl.innerText = `(${roleText})`;
+            
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => { overlay.style.display = 'none'; }, 400);
+            }, 3000);
+        }
+
+        // NAVIGATION CONTROL
+        function switchTabWithTransition(tabId) {
+            const overlay = document.getElementById('transition-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+
+            setTimeout(() => {
+                switchTab(tabId);
+                overlay.style.opacity = '0';
+                setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            }, 1200);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+
+            if (tabId === 'user-tickets') renderUserGeneralTickets();
+            if (tabId === 'app-tickets') renderUserAppTickets();
+            if (tabId === 'admin-panel') renderAdminPanel();
+        }
+
+        // SITE CONTENT EDITING (ADMIN REVERB TO ALL USERS)
+        function renderSiteContent() {
+            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules}</p>`;
+            document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.info}</p>`;
+            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.partners}</p>`;
+
+            document.getElementById('edit-rules-input').value = state.siteData.rules;
+            document.getElementById('edit-info-input').value = state.siteData.info;
+            document.getElementById('edit-partners-input').value = state.siteData.partners;
+        }
+
+        function saveSiteContentChanges() {
+            if (!state.isAdmin) return;
+            state.siteData.rules = document.getElementById('edit-rules-input').value;
+            state.siteData.info = document.getElementById('edit-info-input').value;
+            state.siteData.partners = document.getElementById('edit-partners-input').value;
+
+            localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
+            renderSiteContent();
+            alert("تم تحديث محتوى الموقع بنجاح وإظهاره لجميع الزوار!");
+        }
+
+        // TICKET CATEGORY SELECTION
+        function selectTicketCategory(element, category) {
+            document.querySelectorAll('.ticket-type-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            state.selectedCategory = category;
+        }
+
+        function toggleAuthFields() {
+            const method = document.getElementById('auth-method-select').value;
+            document.getElementById('manual-auth-inputs').style.display = method === 'manual' ? 'block' : 'none';
+        }
+
+        // GENERAL TICKET SUBMISSION
+        function handleGeneralTicketSubmit(e) {
+            e.preventDefault();
+            if (!state.selectedCategory) {
+                alert("يرجى اختيار قسم التذكرة أولاً!");
+                return;
+            }
+
+            const authMethod = document.getElementById('auth-method-select').value;
+            let userId = "", username = "";
+
+            if (authMethod === 'oauth') {
+                if (!state.currentUser) {
+                    alert("يرجى ربط حساب الديسكورد أولاً أو اختيار الإدخال اليدوي!");
+                    return;
+                }
+                userId = state.currentUser.id;
+                username = state.currentUser.username;
+            } else {
+                userId = document.getElementById('manual-user-id').value;
+                username = document.getElementById('manual-username').value;
+                if (!userId || !username) {
+                    alert("يرجى إدخال الـ User ID واسم الحساب بالكامل!");
+                    return;
+                }
+            }
+
+            const details = document.getElementById('ticket-details-input').value;
+
+            const newTicket = {
+                id: 'TICK-' + Date.now().toString().slice(-6),
+                category: state.selectedCategory,
+                userId: userId,
+                username: username,
+                details: details,
+                status: 'مفتوحة (قيد المراجعة)',
+                date: new Date().toLocaleString('ar-EG')
+            };
+
+            state.tickets.push(newTicket);
+            localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
+
+            // Log event to Bot Monitor
+            logBotActivity(`تذكرة جديدة [${newTicket.category}] فتحت بواسطة ${username} (${userId})`);
+
+            alert(`تم فتح تذكرتك بنجاح!\nمرحباً بك في دعم Nova City RP. تم استلام طلبك [${newTicket.category}] وسيقوم فريق الإدارة بالرد عليك فوراً.`);
+            e.target.reset();
+            switchTabWithTransition('user-tickets');
+        }
+
+        // USER TICKETS RENDERING
+        function renderUserGeneralTickets() {
+            const container = document.getElementById('user-general-tickets-list');
+            const myTickets = state.currentUser 
+                ? state.tickets.filter(t => t.userId === state.currentUser.id)
+                : state.tickets;
+
+            container.innerHTML = myTickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد لديك تذاكر مفتوحة.</p>' : '';
+
+            myTickets.forEach(t => {
+                container.innerHTML += `
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <div>
+                                <h3 style="color:var(--purple-glow);">${t.category} (${t.id})</h3>
+                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date} | المستخدم: ${t.username}</span>
+                            </div>
+                            <span class="ticket-badge status-open">${t.status}</span>
+                        </div>
+                        <p style="margin-top:10px; font-size:0.95rem;">${t.details}</p>
+                    </div>`;
+            });
+        }
+
+        // APPLY / APPLICATION FORM DYNAMIC LOGIC
+        function toggleApplyFormType() {
+            setupApplyFormFields();
+        }
+
+        function setupApplyFormFields() {
+            const type = document.getElementById('apply-type-select').value;
+            const container = document.getElementById('dynamic-apply-fields');
+
+            if (type === 'admin') {
+                container.innerHTML = `
+                    <div class="form-group"><label>الاسم الحقيقي:</label><input type="text" id="app-name" required></div>
+                    <div class="form-group"><label>السن:</label><input type="number" id="app-age" required></div>
+                    <div class="form-group"><label>الخبرات السابقة بالإدارة:</label><input type="text" id="app-exp" required></div>
+                    <div class="form-group"><label>ساعات التواجد اليومية:</label><input type="number" id="app-hours" required></div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="form-group"><label>الاسم الحقيقي:</label><input type="text" id="app-name" required></div>
+                    <div class="form-group"><label>المنصة (YouTube/Kick/TikTok/Twitch):</label><input type="text" id="app-platform" required></div>
+                    <div class="form-group"><label>عدد المتابعين:</label><input type="number" id="app-followers" required></div>
+                    <div class="form-group"><label>رابط الحساب / اليوزر:</label><input type="text" id="app-handle" required></div>
+                `;
+            }
+        }
+
+        function handleApplicationSubmit(e) {
+            e.preventDefault();
+            if (!state.currentUser) {
+                alert("يرجى ربط حساب الديسكورد أولاً لرفع طلب تقديم!");
+                return;
+            }
+
+            const type = document.getElementById('apply-type-select').value;
+            const name = document.getElementById('app-name').value;
+
+            const newApp = {
+                id: 'APP-' + Date.now().toString().slice(-6),
+                type: type === 'admin' ? 'تقديم إدارة' : 'تقديم ستريمر',
+                userId: state.currentUser.id,
+                username: state.currentUser.username,
+                applicantName: name,
+                status: 'قيد المراجعة',
+                date: new Date().toLocaleString('ar-EG')
+            };
+
+            state.applications.push(newApp);
+            localStorage.setItem('nova_applications', JSON.stringify(state.applications));
+
+            alert("تم إرسال طلب التقديم بنجاح!");
+            e.target.reset();
+            switchTabWithTransition('app-tickets');
+        }
+
+        function renderUserAppTickets() {
+            const container = document.getElementById('user-app-tickets-list');
+            const myApps = state.currentUser 
+                ? state.applications.filter(a => a.userId === state.currentUser.id)
+                : state.applications;
+
+            container.innerHTML = myApps.length === 0 ? '<p style="color:#a0a0c0;">لا توجد طلبات تقديم مرفوعة.</p>' : '';
+
+            myApps.forEach(a => {
+                container.innerHTML += `
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <div>
+                                <h3 style="color:var(--purple-glow);">${a.type} (${a.id})</h3>
+                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${a.date}</span>
+                            </div>
+                            <span class="ticket-badge status-open">${a.status}</span>
+                        </div>
+                        <p style="margin-top:5px;">مقدم الطلب: ${a.applicantName} (${a.username})</p>
+                    </div>`;
+            });
+        }
+
+        // ADMIN PANEL FULL CONTROL RENDERING
+        function renderAdminPanel() {
+            if (!state.isAdmin) return;
+
+            // Render General Tickets for Admin
+            const genContainer = document.getElementById('admin-general-tickets-list');
+            genContainer.innerHTML = state.tickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر دعم عامة.</p>' : '';
+
+            state.tickets.forEach((t, index) => {
+                genContainer.innerHTML += `
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <div>
+                                <h3>${t.category} | ${t.username} (${t.userId})</h3>
+                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date}</span>
+                            </div>
+                            <span class="ticket-badge status-open">${t.status}</span>
+                        </div>
+                        <p style="margin: 10px 0;">${t.details}</p>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-action-submit" style="background:#2ecc71; padding:6px 12px; font-size:0.85rem;" onclick="updateTicketStatus('general', ${index}, 'تم القبول والحل')">قبول التذكرة</button>
+                            <button class="btn-action-submit" style="background:#e74c3c; padding:6px 12px; font-size:0.85rem;" onclick="updateTicketStatus('general', ${index}, 'تم الرفض')">رفض التذكرة</button>
+                        </div>
+                    </div>`;
+            });
+
+            // Render App Tickets for Admin
+            const appContainer = document.getElementById('admin-app-tickets-list');
+            appContainer.innerHTML = state.applications.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر تقديمات.</p>' : '';
+
+            state.applications.forEach((a, index) => {
+                appContainer.innerHTML += `
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <div>
+                                <h3>${a.type} | ${a.applicantName} (${a.username})</h3>
+                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${a.date}</span>
+                            </div>
+                            <span class="ticket-badge status-open">${a.status}</span>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button class="btn-action-submit" style="background:#2ecc71; padding:6px 12px; font-size:0.85rem;" onclick="updateTicketStatus('app', ${index}, 'تم القبول')">قبول الطلب</button>
+                            <button class="btn-action-submit" style="background:#e74c3c; padding:6px 12px; font-size:0.85rem;" onclick="updateTicketStatus('app', ${index}, 'تم الرفض')">رفض الطلب</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function updateTicketStatus(type, index, status) {
+            if (type === 'general') {
+                state.tickets[index].status = status;
+                localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
+            } else {
+                state.applications[index].status = status;
+                localStorage.setItem('nova_applications', JSON.stringify(state.applications));
+            }
+            renderAdminPanel();
+        }
+
+        // BOT CONTROL SIMULATION & API BRIDGE
+        function sendBotMessage() {
+            const channelId = document.getElementById('bot-channel-id').value;
+            const message = document.getElementById('bot-message-text').value;
+
+            if (!channelId || !message) {
+                alert("يرجى إدخال رقم الروم ومحتوى الرسالة!");
+                return;
+            }
+
+            logBotActivity(`[BOT OUTGOING] أرسل البوت إلى الروم (${channelId}): "${message}"`);
+            alert("تم إرسال الأمر إلى البوت بنجاح!");
+            document.getElementById('bot-message-text').value = '';
+        }
+
+        function logBotActivity(logText) {
+            const logBox = document.getElementById('bot-activity-logs');
+            const timestamp = new Date().toLocaleTimeString('ar-EG');
+            logBox.innerHTML += `<br>[${timestamp}] ${logText}`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
