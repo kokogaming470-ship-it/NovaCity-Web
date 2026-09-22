@@ -44,55 +44,75 @@
             background-attachment: fixed;
         }
 
-        /* Full Page Welcome Overlay Animation */
+        /* Ultra Premium Welcome Overlay Animation */
         #welcome-popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 1, 8, 0.95);
-            backdrop-filter: blur(25px);
+            background: rgba(3, 1, 8, 0.92);
+            backdrop-filter: blur(30px);
             z-index: 1000000;
             display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px;
         }
 
         .welcome-card-anim {
-            background: linear-gradient(135deg, rgba(18, 7, 43, 0.95) 0%, rgba(35, 12, 70, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(25, 10, 55, 0.95) 0%, rgba(10, 3, 25, 0.98) 100%);
             border: 2px solid var(--purple-glow);
-            box-shadow: 0 0 50px rgba(124, 92, 255, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.2);
-            padding: 45px;
-            border-radius: 28px;
+            box-shadow: 0 0 80px rgba(124, 92, 255, 0.6), inset 0 0 30px rgba(179, 136, 255, 0.3);
+            padding: 50px 60px;
+            border-radius: 35px;
             text-align: center;
-            transform: scale(0.7);
-            animation: popupBounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: scale(0.6) rotateX(20deg) translateY(50px);
+            animation: popup3dBounce 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card-anim::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            transform: rotate(45deg);
+            animation: shineLight 4s infinite linear;
+            pointer-events: none;
         }
 
         .welcome-card-anim.admin-theme {
             border-color: var(--gold-accent);
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 71, 87, 0.4);
+            box-shadow: 0 0 100px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 71, 87, 0.5), inset 0 0 25px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(135deg, rgba(35, 20, 5, 0.95) 0%, rgba(15, 5, 20, 0.98) 100%);
         }
 
         .welcome-title-text {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 900;
             color: #fff;
-            text-shadow: 0 0 20px var(--purple-glow);
-            margin-bottom: 10px;
+            text-shadow: 0 0 25px var(--purple-glow);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
         .welcome-card-anim.admin-theme .welcome-title-text {
             background: linear-gradient(135deg, #ffd700 0%, #ff4757 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: none;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
         }
 
-        @keyframes popupBounceIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes popup3dBounce {
+            0% { transform: scale(0.5) rotateX(30deg) translateY(100px); opacity: 0; }
+            100% { transform: scale(1) rotateX(0deg) translateY(0); opacity: 1; }
+        }
+
+        @keyframes shineLight {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         /* Launch Intro Screen */
@@ -293,7 +313,7 @@
             width: 90%;
             max-width: 450px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            animation: popupBounceIn 0.5s ease forwards;
+            animation: popup3dBounce 0.5s ease forwards;
         }
 
         .modal-title {
@@ -705,7 +725,7 @@
                 <i class="fa-brands fa-discord"></i>
                 <span id="auth-btn-text">ربط حساب الديسكورد</span>
             </button>
-            <button class="btn-admin-login" id="admin-login-btn" style="display: none;" onclick="openAdminModal()">
+            <button class="btn-admin-login" id="admin-login-btn" onclick="openAdminModal()">
                 <i class="fa-solid fa-key"></i>
                 <span>دخول كـ أدمن</span>
             </button>
@@ -837,14 +857,32 @@
             <!-- Bot Control & Webhook Dispatcher -->
             <div class="editable-content-box" style="border-color: var(--purple-glow); margin-bottom: 30px;">
                 <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-robot"></i> قسم التحكم بالبوت وإرسال الرسائل (Webhook Dispatcher)</h3>
+                
+                <div class="form-group">
+                    <label>اختر القناة / الروم المستهدفة في الديسكورد:</label>
+                    <select id="bot-webhook-target">
+                        <option value="https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE">دعم فني / إعلانات عامة</option>
+                        <option value="https://discord.com/api/webhooks/1551998295768043600/Y0YS5YHzYclYTUhmOyE4nEdzDVAykqCihRicpjw-aFTjwsUuQd0a7VxVKEsZYBhTm430">طلبات انضمام للشرطة</option>
+                        <option value="https://discord.com/api/webhooks/1551998182341353594/GA_VMRcmieKrD88NozYslJknx5ofXx165-fc6kelnEPBbMspHy1YLL9SZNhOta197cHa">طلبات انضمام للمطافي</option>
+                        <option value="https://discord.com/api/webhooks/1551998090771431425/CIjQpsskndOAioafPT34FPSfdG8w95y-nIMPcnXBf8zIdNEPoHfj_pTJFaOKukb4rwHx">طلبات انضمام للإسعاف</option>
+                        <option value="https://discord.com/api/webhooks/1551997964858429493/LWjOezwQhz_I75tPX54o4KOqI8ajgyMC-ve7fC0Ku7bWMWcTAnj-gn_sPMMAfCzE4W_h">طلبات بناء شيء</option>
+                        <option value="https://discord.com/api/webhooks/1551997813997437069/jQCR7yBMCElLPvOWc3IZ7XAzmDpa9R-0l_SSGjpFf5hax8kAbpD5q_CiWOJ7Nb2NZa0z">طلبات شراء شيء</option>
+                        <option value="https://discord.com/api/webhooks/1551997707298545807/z4mUmZOInVCK8s2wEUi0jPxCJWjDQQEBUeroanmPXtA2z8z7FLubD2aP0BW6lZBt-uIp">طلب مراجعة ألبان</option>
+                        <option value="https://discord.com/api/webhooks/1551997596086837313/pV7__Z7Ld1GY1WzbJH_pGwTkt7wqV_cc5k5HDhniPJuRiaQDG-7BvEJMqNmkMfQjr-Sq">شكاوى الإداريين</option>
+                        <option value="https://discord.com/api/webhooks/1551997409897349190/oy7YOD6jd3wgPvDWCGW0wIxYARSU8lOoqwDH9d7zsRQnD0wYzSEvb_6j5yaMLTPZZq9d">شكاوى اللاعبين</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>عنوان الرسالة (Title):</label>
-                    <input type="text" id="bot-msg-title" placeholder="مثال: إعلان هام من إداريي السيرفر">
+                    <input type="text" id="bot-msg-title" placeholder="مثال: إعلان هام من إدارة Nova City RP">
                 </div>
+                
                 <div class="form-group">
                     <label>محتوى الرسالة (Description):</label>
                     <textarea id="bot-msg-content" rows="4" placeholder="اكتب النص الذي تريد للبوت إرساله..."></textarea>
                 </div>
+
                 <button class="btn-action-submit" onclick="sendAdminCustomWebhookMsg()">
                     <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة عبر البوت الآن
                 </button>
@@ -950,7 +988,7 @@
 
             if (state.isAdmin) {
                 document.getElementById('admin-tab-btn').style.display = 'flex';
-                document.getElementById('admin-login-btn').style.display = 'flex';
+                document.getElementById('admin-login-btn').style.display = 'none';
             }
         });
 
@@ -976,7 +1014,7 @@
             setTimeout(() => {
                 overlay.style.opacity = '0';
                 setTimeout(() => { overlay.style.display = 'none'; }, 500);
-            }, 3000);
+            }, 3200);
         }
 
         async function sendDiscordWebhook(webhookUrl, embedData) {
@@ -998,6 +1036,9 @@
         }
 
         async function sendAdminCustomWebhookMsg() {
+            if (!state.isAdmin) return;
+
+            const targetWebhook = document.getElementById('bot-webhook-target').value;
             const title = document.getElementById('bot-msg-title').value.trim();
             const content = document.getElementById('bot-msg-content').value.trim();
 
@@ -1009,14 +1050,14 @@
             const embedData = {
                 title: `📢 ${title}`,
                 description: content,
-                color: 8133887,
-                footer: { text: "صادرة من لوحة تحكم Nova City RP" },
+                color: 16721495,
+                footer: { text: "صادرة من لوحة تحكم Nova City RP الإدارية" },
                 timestamp: new Date().toISOString()
             };
 
-            const success = await sendDiscordWebhook(WEBHOOKS["default"], embedData);
+            const success = await sendDiscordWebhook(targetWebhook, embedData);
             if (success) {
-                alert("تم إرسال الرسالة عبر البوت بنجاح إلى الديسكورد!");
+                alert("تم إرسال الرسالة عبر البوت بنجاح إلى الروم المحددة بالديسكورد!");
                 document.getElementById('bot-msg-title').value = '';
                 document.getElementById('bot-msg-content').value = '';
             } else {
@@ -1054,7 +1095,6 @@
         function updateAuthUI() {
             if (state.currentUser) {
                 document.getElementById('auth-btn-text').innerText = `${state.currentUser.username}`;
-                document.getElementById('admin-login-btn').style.display = 'flex';
             }
         }
 
@@ -1068,6 +1108,7 @@
                 localStorage.setItem('nova_is_admin', 'true');
                 closeAdminModal();
                 document.getElementById('admin-tab-btn').style.display = 'flex';
+                document.getElementById('admin-login-btn').style.display = 'none';
                 triggerWelcomeAnimation(true);
             } else {
                 alert("كلمة المرور غير صحيحة!");
@@ -1423,7 +1464,3 @@
                         </div>
                     </div>`;
             });
-        }
-    </script>
-</body>
-</html>
