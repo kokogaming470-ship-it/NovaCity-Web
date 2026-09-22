@@ -777,7 +777,7 @@
             CLIENT_ID: "1525287436198875266",
             REDIRECT_URI: window.location.origin + window.location.pathname,
             ADMIN_PASSWORD: "997816",
-            BOT_TOKEN: "MTUyNTI4NzQzNjE5ODg3NTI2Ng.GmrHUw.KZIxJgWXBLKcf5P1fOL5dCIbzzBxjwqhu5sCNQ",
+            BOT_TOKEN: "MTUyNTI4NzQzNjE5ODg3NTI2Ng.G6HoVT.7KYeG50rdjNq_vukotqwWDIV0GVd_V6v89jCQY",
             ADMIN_IDS: ["1433671590264045628", "1510646428559610068"]
         };
 
@@ -803,13 +803,17 @@
 
             if (state.currentUser) {
                 updateAuthUI();
-                // Member Intro Delay Trigger (5 seconds after login detected)
                 if (!state.isAdmin && !sessionStorage.getItem('intro_shown')) {
                     setTimeout(() => {
                         triggerLoginIntro("Member");
                         sessionStorage.setItem('intro_shown', 'true');
                     }, 5000);
                 }
+            }
+
+            if (state.isAdmin) {
+                document.getElementById('admin-tab-btn').style.display = 'flex';
+                document.getElementById('admin-login-btn').style.display = 'flex';
             }
         });
 
@@ -908,9 +912,9 @@
             if (tabId === 'admin-panel') renderAdminPanel();
         }
 
-        // SITE CONTENT EDITING (ADMIN REVERB TO ALL USERS)
+        // SITE CONTENT EDITING
         function renderSiteContent() {
-            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules}</p>`;
+            document.getElementById('rules-content-display').innerHTML = `2. <i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules}</p>`;
             document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.info}</p>`;
             document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.partners}</p>`;
 
@@ -984,7 +988,6 @@
             state.tickets.push(newTicket);
             localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
 
-            // Log event to Bot Monitor
             logBotActivity(`تذكرة جديدة [${newTicket.category}] فتحت بواسطة ${username} (${userId})`);
 
             alert(`تم فتح تذكرتك بنجاح!\nمرحباً بك في دعم Nova City RP. تم استلام طلبك [${newTicket.category}] وسيقوم فريق الإدارة بالرد عليك فوراً.`);
@@ -1016,7 +1019,7 @@
             });
         }
 
-        // APPLY / APPLICATION FORM DYNAMIC LOGIC
+        // APPLY / APPLICATION FORM LOGIC
         function toggleApplyFormType() {
             setupApplyFormFields();
         }
@@ -1152,19 +1155,39 @@
             renderAdminPanel();
         }
 
-        // BOT CONTROL SIMULATION & API BRIDGE
-        function sendBotMessage() {
-            const channelId = document.getElementById('bot-channel-id').value;
-            const message = document.getElementById('bot-message-text').value;
+        // DISCORD BOT API BRIDGE
+        async function sendBotMessage() {
+            const channelId = document.getElementById('bot-channel-id').value.trim();
+            const message = document.getElementById('bot-message-text').value.trim();
 
             if (!channelId || !message) {
                 alert("يرجى إدخال رقم الروم ومحتوى الرسالة!");
                 return;
             }
 
-            logBotActivity(`[BOT OUTGOING] أرسل البوت إلى الروم (${channelId}): "${message}"`);
-            alert("تم إرسال الأمر إلى البوت بنجاح!");
-            document.getElementById('bot-message-text').value = '';
+            try {
+                const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bot ${CONFIG.BOT_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content: message })
+                });
+
+                if (response.ok) {
+                    logBotActivity(`[BOT SUCCESS] تم إرسال الرسالة بنجاح إلى الروم (${channelId}): "${message}"`);
+                    alert("تم إرسال الرسالة عبر البوت إلى ديسكورد بنجاح!");
+                    document.getElementById('bot-message-text').value = '';
+                } else {
+                    const errData = await response.json();
+                    logBotActivity(`[BOT ERROR] فشل الإرسال: ${errData.message || 'تأكد من صلاحيات البوت والروم'}`);
+                    alert(`حدث خطأ أثناء الإرسال: ${errData.message || 'تأكد من معرف الروم وصلاحيات البوت'}`);
+                }
+            } catch (err) {
+                logBotActivity(`[BOT NETWORK ERROR] لم يتم الاتصال بالـ API: ${err.message}`);
+                alert("تعذر الاتصال بـ Discord API. تأكد من جودة الاتصال بالإنترنت.");
+            }
         }
 
         function logBotActivity(logText) {
