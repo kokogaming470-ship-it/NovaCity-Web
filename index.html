@@ -11,16 +11,16 @@
     
     <style>
         :root {
-            --bg-dark: #05020a;
-            --bg-card: rgba(18, 7, 43, 0.85);
-            --purple-primary: #7c5cff;
+            --bg-dark: #030108;
+            --bg-card: rgba(15, 6, 35, 0.75);
+            --purple-primary: #8c52ff;
             --purple-dark: #12062b;
-            --purple-glow: #b388ff;
+            --purple-glow: #00f0ff;
+            --pink-glow: #ff007f;
             --text-light: #f1f2f6;
-            --glass-border: rgba(124, 92, 255, 0.35);
-            --fire-color: #ff4757;
+            --glass-border: rgba(140, 82, 255, 0.3);
+            --fire-color: #ff3838;
             --gold-accent: #ffd700;
-            --green-success: #2ed573;
         }
 
         * {
@@ -29,7 +29,7 @@
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
             user-select: none;
-            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         body {
@@ -37,198 +37,77 @@
             color: var(--text-light);
             overflow-x: hidden;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(124, 92, 255, 0.2) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(255, 71, 87, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(18, 7, 43, 0.9) 0%, #05020a 100%);
-            background-attachment: fixed;
-        }
-
-        /* Welcome Overlay Animation */
-        #welcome-popup-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 1, 8, 0.92);
-            backdrop-filter: blur(30px);
-            z-index: 1000000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            perspective: 1000px;
-        }
-
-        .welcome-card-anim {
-            background: linear-gradient(135deg, rgba(25, 10, 55, 0.95) 0%, rgba(10, 3, 25, 0.98) 100%);
-            border: 2px solid var(--purple-glow);
-            box-shadow: 0 0 80px rgba(124, 92, 255, 0.6), inset 0 0 30px rgba(179, 136, 255, 0.3);
-            padding: 50px 60px;
-            border-radius: 35px;
-            text-align: center;
-            transform: scale(0.6) rotateX(20deg) translateY(50px);
-            animation: popup3dBounce 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             position: relative;
-            overflow: hidden;
         }
 
-        .welcome-card-anim.admin-theme {
-            border-color: var(--gold-accent);
-            box-shadow: 0 0 100px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 71, 87, 0.5), inset 0 0 25px rgba(255, 215, 0, 0.3);
-            background: linear-gradient(135deg, rgba(35, 20, 5, 0.95) 0%, rgba(15, 5, 20, 0.98) 100%);
-        }
-
-        .welcome-title-text {
-            font-size: 3rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 25px var(--purple-glow);
-            margin-bottom: 12px;
-        }
-
-        .welcome-card-anim.admin-theme .welcome-title-text {
-            background: linear-gradient(135deg, #ffd700 0%, #ff4757 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-
-        @keyframes popup3dBounce {
-            0% { transform: scale(0.5) rotateX(30deg) translateY(100px); opacity: 0; }
-            100% { transform: scale(1) rotateX(0deg) translateY(0); opacity: 1; }
-        }
-
-        /* Launch Intro Screen */
-        #intro-overlay {
+        /* Particle Background Canvas */
+        #bg-canvas {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #12062b 0%, #030108 100%);
-            z-index: 999999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             pointer-events: none;
-            animation: introExit 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards 3.8s;
         }
 
-        .intro-title {
-            font-size: 3.8rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 20px var(--purple-primary), 0 0 50px var(--purple-glow);
-            transform: translateY(-150px);
-            opacity: 0;
-            animation: cinematicSlideDown 1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.2s;
-        }
-
-        .intro-subtitle {
-            font-size: 1.4rem;
-            color: var(--purple-glow);
-            margin-top: 12px;
-            font-weight: 700;
-            transform: translateX(-100px);
-            opacity: 0;
-            animation: cinematicSlideLeft 1s cubic-bezier(0.19, 1, 0.22, 1) forwards 0.7s;
-        }
-
-        .loader-bar-container {
-            width: 300px; height: 6px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px; margin-top: 35px;
-            overflow: hidden; border: 1px solid var(--glass-border);
-            opacity: 0; animation: fadeIn 0.5s ease forwards 1.2s;
-        }
-
-        .loader-bar-fill {
-            width: 0%; height: 100%;
-            background: linear-gradient(90deg, var(--purple-primary), var(--fire-color));
-            box-shadow: 0 0 15px var(--purple-glow);
-            animation: fillProgress 2.2s ease-in-out forwards 1.4s;
-        }
-
-        /* Transition Overlay */
-        #transition-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 2, 10, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 777777;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .fire-text {
-            font-size: 3.2rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 15px #ff4757, 0 0 30px #ff6b81, 0 0 50px var(--purple-primary);
-            animation: pulseGlow 0.8s infinite alternate;
-        }
-
-        @keyframes cinematicSlideDown { 0% { transform: translateY(-150px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-        @keyframes cinematicSlideLeft { 0% { transform: translateX(-100px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-        @keyframes fillProgress { 0% { width: 0%; } 100% { width: 100%; } }
-        @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes introExit { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.08); visibility: hidden; } }
-        @keyframes pulseGlow { 0% { transform: scale(0.97); opacity: 0.8; } 100% { transform: scale(1.03); opacity: 1; } }
-
-        /* Header */
+        /* Futuristic Header */
         header {
             position: fixed;
             top: 0; left: 0; width: 100%;
             z-index: 10000;
-            background: rgba(6, 2, 18, 0.88);
-            backdrop-filter: blur(18px);
+            background: rgba(6, 2, 18, 0.85);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
-            padding: 12px 30px;
+            padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .logo-text {
             font-size: 1.8rem;
             font-weight: 900;
-            background: linear-gradient(135deg, #fff 0%, var(--purple-glow) 50%, var(--fire-color) 100%);
+            background: linear-gradient(135deg, #fff 0%, var(--purple-glow) 50%, var(--pink-glow) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
+            text-shadow: 0 0 25px rgba(140, 82, 255, 0.6);
+            letter-spacing: 1px;
         }
 
         nav {
             display: flex;
             gap: 6px;
             background: rgba(255, 255, 255, 0.03);
-            padding: 5px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow-x: auto;
+            max-width: 100%;
         }
 
         .nav-btn {
             padding: 8px 14px;
             border: none;
             background: transparent;
-            color: #a0a0c0;
+            color: #b0b0d0;
             font-weight: 700;
-            font-size: 0.88rem;
-            border-radius: 9px;
+            font-size: 0.85rem;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         .nav-btn:hover, .nav-btn.active {
             color: #fff;
-            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%);
-            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            transform: translateY(-3px);
+            background: linear-gradient(135deg, var(--purple-primary) 0%, rgba(255, 0, 127, 0.6) 100%);
+            box-shadow: 0 0 20px rgba(140, 82, 255, 0.5);
+            transform: translateY(-2px);
         }
 
         .auth-controls {
@@ -242,66 +121,71 @@
             color: #fff;
             border: none;
             padding: 9px 16px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 800;
             font-size: 0.85rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
         }
 
-        .btn-admin-login {
-            background: linear-gradient(135deg, #ff4757 0%, #2f3542 100%);
-            color: #fff;
-            border: 1px solid rgba(255, 71, 87, 0.5);
-            padding: 9px 16px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .btn-auth:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.7);
         }
 
-        /* Modal */
+        /* Modal Overlay & Card */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.82);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
             z-index: 999000;
             display: none;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
         }
 
         .modal-box {
-            background: var(--bg-card);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
+            background: linear-gradient(145deg, rgba(20, 8, 45, 0.95) 0%, rgba(8, 2, 20, 0.98) 100%);
+            border: 2px solid var(--purple-primary);
+            border-radius: 25px;
+            padding: 35px;
             width: 90%;
-            max-width: 450px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            animation: popup3dBounce 0.5s ease forwards;
+            max-width: 440px;
+            box-shadow: 0 0 50px rgba(140, 82, 255, 0.5), inset 0 0 20px rgba(0, 240, 255, 0.2);
+            transform: scale(0.7) rotateX(15deg);
+            animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes modalPop {
+            to { transform: scale(1) rotateX(0deg); }
         }
 
         .modal-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 900;
-            color: var(--purple-glow);
+            color: #fff;
             margin-bottom: 20px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            text-shadow: 0 0 15px var(--purple-primary);
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
@@ -314,10 +198,10 @@
 
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 11px 14px;
+            padding: 12px 16px;
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid var(--glass-border);
-            border-radius: 10px;
+            border-radius: 12px;
             color: #fff;
             font-size: 0.95rem;
             outline: none;
@@ -325,106 +209,116 @@
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--purple-glow);
-            box-shadow: 0 0 15px rgba(179, 136, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
         }
 
         /* Main Area */
         main {
-            margin-top: 90px;
-            padding: 25px 35px;
+            margin-top: 110px;
+            padding: 25px 20px;
             min-height: calc(100vh - 180px);
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .page-section { display: none; }
         .page-section.active {
             display: block;
-            animation: sectionSlideUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            animation: sectionFadeUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
-        @keyframes sectionSlideUp {
-            0% { opacity: 0; transform: translateY(30px); }
+        @keyframes sectionFadeUp {
+            0% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         .hero-banner {
             text-align: center;
-            padding: 50px 25px;
+            padding: 60px 25px;
             background: var(--bg-card);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            border-radius: 28px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
         }
 
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(140, 82, 255, 0.15) 0%, transparent 60%);
+            animation: rotateBg 15s linear infinite;
+        }
+
+        @keyframes rotateBg { 100% { transform: rotate(360deg); } }
+
         .hero-title {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 900;
             margin-bottom: 15px;
             color: #fff;
+            position: relative;
         }
 
         .hero-title span {
-            color: var(--purple-glow);
-            text-shadow: 0 0 15px var(--purple-primary);
+            background: linear-gradient(135deg, var(--purple-glow), var(--pink-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
         }
 
         .hero-desc {
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: #b0b0d0;
             max-width: 850px;
             margin: 0 auto;
-            line-height: 1.8;
+            line-height: 1.9;
+            position: relative;
         }
 
         .editable-content-box {
             background: var(--bg-card);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 24px;
+            padding: 35px;
             margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            position: relative;
-        }
-
-        .fire-animated-icon {
-            color: #ff4757;
-            font-size: 2.2rem;
-            margin-left: 10px;
-            display: inline-block;
-            animation: firePulse 1.2s infinite alternate;
-        }
-
-        @keyframes firePulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 8px #ff4757); }
-            100% { transform: scale(1.25); filter: drop-shadow(0 0 20px #ff6b81); }
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
         }
 
         .ticket-creator-box {
-            background: linear-gradient(135deg, rgba(18, 7, 43, 0.95) 0%, rgba(35, 12, 70, 0.85) 100%);
+            background: linear-gradient(145deg, rgba(18, 7, 43, 0.85) 0%, rgba(35, 12, 70, 0.75) 100%);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            border-radius: 28px;
             padding: 35px;
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
+            box-shadow: 0 0 40px rgba(140, 82, 255, 0.2);
+            backdrop-filter: blur(15px);
         }
 
         .ticket-type-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .ticket-type-btn {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--glass-border);
             color: #c0c0e0;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 14px 10px;
+            border-radius: 14px;
             cursor: pointer;
             text-align: center;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -432,9 +326,33 @@
         }
 
         .ticket-type-btn:hover, .ticket-type-btn.selected {
-            background: var(--purple-primary);
+            background: linear-gradient(135deg, var(--purple-primary), var(--pink-glow));
             color: #fff;
-            border-color: var(--purple-glow);
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(140, 82, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn-action-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, #ff007f 100%);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(140, 82, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-action-submit:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.8);
         }
 
         .admin-split-grid {
@@ -446,17 +364,22 @@
 
         @media (max-width: 900px) {
             .admin-split-grid { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: stretch; text-align: center; }
+            nav { justify-content: flex-start; }
+            .auth-controls { justify-content: center; width: 100%; }
+            .hero-title { font-size: 2.2rem; }
         }
 
         .admin-column-box {
-            background: rgba(12, 4, 30, 0.9);
+            background: rgba(12, 4, 30, 0.85);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 22px;
+            border-radius: 22px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
         }
 
         .admin-column-header {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 900;
             color: var(--purple-glow);
             margin-bottom: 20px;
@@ -476,7 +399,7 @@
         .ticket-card {
             background: var(--bg-card);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 20px;
         }
 
@@ -494,15 +417,16 @@
             border-radius: 20px;
             font-size: 0.78rem;
             font-weight: 800;
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--purple-glow);
+            border: 1px solid var(--purple-glow);
         }
 
-        .status-open { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid #3498db; }
-
         .chat-thread-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 14px;
             margin-top: 12px;
             max-height: 220px;
             overflow-y: auto;
@@ -516,7 +440,7 @@
         }
 
         .chat-msg.admin {
-            background: rgba(124, 92, 255, 0.25);
+            background: rgba(140, 82, 255, 0.25);
             border-right: 3px solid var(--purple-primary);
         }
 
@@ -551,29 +475,12 @@
             cursor: pointer;
         }
 
-        .btn-action-submit {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--purple-primary) 0%, #4834d4 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
         .btn-danger-clear {
-            background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #ff3838 0%, #c0392b 100%);
             color: #fff;
             border: none;
             padding: 10px 18px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 800;
             cursor: pointer;
             margin-top: 10px;
@@ -581,10 +488,10 @@
 
         footer {
             text-align: center;
-            padding: 22px;
+            padding: 25px;
             border-top: 1px solid var(--glass-border);
             background: rgba(3, 1, 8, 0.95);
-            margin-top: 40px;
+            margin-top: 50px;
         }
 
         .copyright { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; margin-bottom: 5px; }
@@ -593,30 +500,10 @@
 </head>
 <body>
 
-    <!-- Cinematic Welcome Popup Animation -->
-    <div id="welcome-popup-overlay">
-        <div class="welcome-card-anim" id="welcome-card-box">
-            <div class="welcome-title-text" id="welcome-title-content">Welcome to Nova City</div>
-            <p id="welcome-subtitle-content" style="color: #c0c0e0; font-size: 1.2rem; font-weight: 700;">نتمنى لك تجربة واقعية ممتازة وممتعة داخل المدينة 🚀</p>
-        </div>
-    </div>
+    <!-- Particle Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
 
-    <!-- Launch Intro -->
-    <div id="intro-overlay">
-        <div class="intro-title">Welcome to Nova City RP</div>
-        <div class="intro-subtitle">أقوى سيرفر رول بلاي في ماين كرافت في مصر 🌟</div>
-        <div class="loader-bar-container">
-            <div class="loader-bar-fill"></div>
-        </div>
-    </div>
-
-    <!-- Transition Overlay -->
-    <div id="transition-overlay">
-        <i class="fa-solid fa-fire fire-animated-icon" style="font-size: 3.5rem;"></i>
-        <div class="fire-text">NOVA CITY ON FIRE</div>
-    </div>
-
-    <!-- Admin Modal -->
+    <!-- Admin Password Modal -->
     <div class="modal-overlay" id="admin-pass-modal">
         <div class="modal-box">
             <div class="modal-title"><i class="fa-solid fa-user-shield"></i> تسجيل دخول كـ أدمن</div>
@@ -638,27 +525,22 @@
         </div>
 
         <nav id="nav-menu">
-            <button class="nav-btn active" onclick="switchTabWithTransition('home')"><i class="fa-solid fa-house"></i> الرئيسية</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('rules')"><i class="fa-solid fa-book"></i> القوانين</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('info')"><i class="fa-solid fa-circle-info"></i> معلومات عامة</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('tutorials')"><i class="fa-solid fa-video"></i> الشروحات</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('apply')"><i class="fa-solid fa-file-pen"></i> التقديمات</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('open-ticket')"><i class="fa-solid fa-headset"></i> فتح تذكرة</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('user-tickets')"><i class="fa-solid fa-ticket"></i> التذاكر</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('app-tickets')"><i class="fa-solid fa-clipboard-check"></i> تذاكر التقديمات</button>
-            <button class="nav-btn" onclick="switchTabWithTransition('partners')"><i class="fa-solid fa-handshake"></i> الشراكات</button>
-            <!-- زر لوحة التحكم مخفي افتراضياً ولن يظهر إطلاقاً إلا بعد الدخول بكلمة السر -->
-            <button class="nav-btn" onclick="switchTabWithTransition('admin-panel')" id="admin-tab-btn" style="display: none; color: #ff4757;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم</button>
+            <button class="nav-btn active" onclick="switchTab('home')"><i class="fa-solid fa-house"></i> الرئيسية</button>
+            <button class="nav-btn" onclick="switchTab('rules')"><i class="fa-solid fa-book"></i> القوانين</button>
+            <button class="nav-btn" onclick="switchTab('info')"><i class="fa-solid fa-circle-info"></i> معلومات عامة</button>
+            <button class="nav-btn" onclick="switchTab('tutorials')"><i class="fa-solid fa-video"></i> الشروحات</button>
+            <button class="nav-btn" onclick="switchTab('apply')"><i class="fa-solid fa-file-pen"></i> التقديمات</button>
+            <button class="nav-btn" onclick="switchTab('open-ticket')"><i class="fa-solid fa-headset"></i> فتح تذكرة</button>
+            <button class="nav-btn" onclick="switchTab('user-tickets')"><i class="fa-solid fa-ticket"></i> التذاكر</button>
+            <button class="nav-btn" onclick="switchTab('app-tickets')"><i class="fa-solid fa-clipboard-check"></i> تذاكر التقديمات</button>
+            <button class="nav-btn" onclick="switchTab('partners')"><i class="fa-solid fa-handshake"></i> الشراكات</button>
+            <button class="nav-btn" onclick="openAdminModalOrTab()" id="admin-tab-btn" style="color: #ff007f;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم</button>
         </nav>
 
         <div class="auth-controls">
             <button class="btn-auth" id="discord-auth-btn" onclick="initiateDiscordLogin()">
                 <i class="fa-brands fa-discord"></i>
                 <span id="auth-btn-text">ربط حساب الديسكورد</span>
-            </button>
-            <button class="btn-admin-login" id="admin-login-btn" onclick="openAdminModal()">
-                <i class="fa-solid fa-key"></i>
-                <span>دخول كـ أدمن</span>
             </button>
         </div>
     </header>
@@ -704,7 +586,6 @@
 
                 <form id="apply-form-element" onsubmit="handleApplicationSubmit(event)">
                     <div id="dynamic-apply-fields"></div>
-                    
                     <button type="submit" class="btn-action-submit" style="margin-top: 20px;">
                         <i class="fa-solid fa-paper-plane"></i> إرسال طلب التقديم الآن
                     </button>
@@ -733,25 +614,6 @@
                 </div>
 
                 <form id="general-ticket-form" onsubmit="handleGeneralTicketSubmit(event)">
-                    <div class="form-group">
-                        <label>طريقة التعريف بالحساب:</label>
-                        <select id="auth-method-select" onchange="toggleAuthFields()">
-                            <option value="oauth">الربط بالحساب المسجل (OAuth2)</option>
-                            <option value="manual">إدخال الـ User ID والاسم يدوياً</option>
-                        </select>
-                    </div>
-
-                    <div id="manual-auth-inputs" style="display: none;">
-                        <div class="form-group">
-                            <label>Discord User ID:</label>
-                            <input type="text" id="manual-user-id" placeholder="مثال: 1433671590264045628">
-                        </div>
-                        <div class="form-group">
-                            <label>اسم حساب الديسكورد (Username):</label>
-                            <input type="text" id="manual-username" placeholder="اسم حسابك الدقيق">
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label>تفاصيل التذكرة / موضوع الطلب:</label>
                         <textarea id="ticket-details-input" rows="4" placeholder="اكتب تفاصيل طلبك أو استفسارك هنا..." required></textarea>
@@ -783,32 +645,20 @@
 
         <!-- Advanced Admin Control Panel -->
         <section id="admin-panel" class="page-section">
-            <h2 style="color: #ff4757; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية والإدارة المباشرة</h2>
+            <h2 style="color: #ff007f; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية والإدارة المباشرة</h2>
 
             <!-- Bot Control & Webhook Dispatcher -->
             <div class="editable-content-box" style="border-color: var(--purple-glow); margin-bottom: 30px;">
                 <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-robot"></i> قسم التحكم بالبوت وإرسال الرسائل (Webhook Dispatcher)</h3>
                 
                 <div class="form-group">
-                    <label>اختر القناة / الروم أو أدخل الرابط يدوياً:</label>
-                    <select id="bot-webhook-target" onchange="toggleCustomWebhookInput()">
-                        <option value="custom">✏️ إدخال رابط Webhook يدويًا (Custom Webhook URL)</option>
-                        <option value="https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE">دعم فني / إعلانات عامة</option>
-                        <option value="https://discord.com/api/webhooks/1551998295768043600/Y0YS5YHzYclYTUhmOyE4nEdzDVAykqCihRicpjw-aFTjwsUuQd0a7VxVKEsZYBhTm430">طلبات انضمام للشرطة</option>
-                        <option value="https://discord.com/api/webhooks/1551998182341353594/GA_VMRcmieKrD88NozYslJknx5ofXx165-fc6kelnEPBbMspHy1YLL9SZNhOta197cHa">طلبات انضمام للمطافي</option>
-                        <option value="https://discord.com/api/webhooks/1551998090771431425/CIjQpsskndOAioafPT34FPSfdG8w95y-nIMPcnXBf8zIdNEPoHfj_pTJFaOKukb4rwHx">طلبات انضمام للإسعاف</option>
-                        <option value="https://discord.com/api/webhooks/1551997964858429493/LWjOezwQhz_I75tPX54o4KOqI8ajgyMC-ve7fC0Ku7bWMWcTAnj-gn_sPMMAfCzE4W_h">طلبات بناء شيء</option>
-                        <option value="https://discord.com/api/webhooks/1551997813997437069/jQCR7yBMCElLPvOWc3IZ7XAzmDpa9R-0l_SSGjpFf5hax8kAbpD5q_CiWOJ7Nb2NZa0z">طلبات شراء شيء</option>
-                        <option value="https://discord.com/api/webhooks/1551997707298545807/z4mUmZOInVCK8s2wEUi0jPxCJWjDQQEBUeroanmPXtA2z8z7FLubD2aP0BW6lZBt-uIp">طلب مراجعة ألبان</option>
-                        <option value="https://discord.com/api/webhooks/1551997596086837313/pV7__Z7Ld1GY1WzbJH_pGwTkt7wqV_cc5k5HDhniPJuRiaQDG-7BvEJMqNmkMfQjr-Sq">شكاوى الإداريين</option>
-                        <option value="https://discord.com/api/webhooks/1551997409897349190/oy7YOD6jd3wgPvDWCGW0wIxYARSU8lOoqwDH9d7zsRQnD0wYzSEvb_6j5yaMLTPZZq9d">شكاوى اللاعبين</option>
-                    </select>
+                    <label style="color: #00f0ff;"><i class="fa-solid fa-link"></i> رابط الـ Webhook الخاص بالروم المراد الإرسال إليها:</label>
+                    <input type="url" id="custom-webhook-url" placeholder="https://discord.com/api/webhooks/..." style="border-color: #00f0ff;">
                 </div>
 
-                <!-- المكان المخصص لكتابة الـ Webhook يدوياً -->
-                <div class="form-group" id="custom-webhook-container">
-                    <label style="color: #ffd700;"><i class="fa-solid fa-link"></i> رابط الـ Webhook الخاص بالروم المراد الإرسال إليها:</label>
-                    <input type="url" id="custom-webhook-url" placeholder="https://discord.com/api/webhooks/..." style="border-color: #ffd700;">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-image"></i> رابط صورة أفتار البوت (اختياري / Avatar URL):</label>
+                    <input type="url" id="bot-avatar-url" placeholder="ضع رابط صورة هنا أو اتركه فارغاً للافتراضي">
                 </div>
 
                 <div class="form-group">
@@ -822,26 +672,24 @@
                 </div>
 
                 <button class="btn-action-submit" onclick="sendAdminCustomWebhookMsg()">
-                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة عبر الـ Webhook الآن
+                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة الآن
                 </button>
             </div>
 
             <!-- Split Two-Column Layout -->
             <div class="admin-split-grid">
-                <!-- Right Side: Application Tickets -->
                 <div class="admin-column-box">
                     <div class="admin-column-header">
                         <i class="fa-solid fa-id-card"></i>
-                        <span>تذاكر التقديمات (الجهة اليمنى)</span>
+                        <span>تذاكر التقديمات</span>
                     </div>
                     <div class="tickets-container" id="admin-app-tickets-list"></div>
                 </div>
 
-                <!-- Left Side: General Tickets & Live Support -->
                 <div class="admin-column-box">
                     <div class="admin-column-header">
                         <i class="fa-solid fa-comments"></i>
-                        <span>التذاكر العامة والدعم الفني (الجهة اليسرى)</span>
+                        <span>التذاكر العامة والدعم الفني</span>
                     </div>
                     <div class="tickets-container" id="admin-general-tickets-list"></div>
                 </div>
@@ -868,7 +716,7 @@
                 </div>
                 
                 <button class="btn-action-submit" onclick="saveSiteContentChanges()" style="margin-top: 15px;">
-                    <i class="fa-solid fa-floppy-disk"></i> حفظ وتثبيت التعديلات على الموقع لجميع الزوار فوراً
+                    <i class="fa-solid fa-floppy-disk"></i> حفظ وتثبيت التعديلات
                 </button>
             </div>
         </section>
@@ -882,19 +730,6 @@
 
     <!-- JavaScript Engine -->
     <script>
-        const WEBHOOKS = {
-            "دعم فني": "https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE",
-            "طلب انضمام إلى الشرطة": "https://discord.com/api/webhooks/1551998295768043600/Y0YS5YHzYclYTUhmOyE4nEdzDVAykqCihRicpjw-aFTjwsUuQd0a7VxVKEsZYBhTm430",
-            "طلب انضمام إلى المطافي": "https://discord.com/api/webhooks/1551998182341353594/GA_VMRcmieKrD88NozYslJknx5ofXx165-fc6kelnEPBbMspHy1YLL9SZNhOta197cHa",
-            "طلب انضمام إلى الإسعاف": "https://discord.com/api/webhooks/1551998090771431425/CIjQpsskndOAioafPT34FPSfdG8w95y-nIMPcnXBf8zIdNEPoHfj_pTJFaOKukb4rwHx",
-            "طلب بناء شيء": "https://discord.com/api/webhooks/1551997964858429493/LWjOezwQhz_I75tPX54o4KOqI8ajgyMC-ve7fC0Ku7bWMWcTAnj-gn_sPMMAfCzE4W_h",
-            "طلب شراء شيء": "https://discord.com/api/webhooks/1551997813997437069/jQCR7yBMCElLPvOWc3IZ7XAzmDpa9R-0l_SSGjpFf5hax8kAbpD5q_CiWOJ7Nb2NZa0z",
-            "طلب مراجعة ألبان": "https://discord.com/api/webhooks/1551997707298545807/z4mUmZOInVCK8s2wEUi0jPxCJWjDQQEBUeroanmPXtA2z8z7FLubD2aP0BW6lZBt-uIp",
-            "شكوى على إداري": "https://discord.com/api/webhooks/1551997596086837313/pV7__Z7Ld1GY1WzbJH_pGwTkt7wqV_cc5k5HDhniPJuRiaQDG-7BvEJMqNmkMfQjr-Sq",
-            "شكوى على لاعب": "https://discord.com/api/webhooks/1551997409897349190/oy7YOD6jd3wgPvDWCGW0wIxYARSU8lOoqwDH9d7zsRQnD0wYzSEvb_6j5yaMLTPZZq9d",
-            "default": "https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE"
-        };
-
         const CONFIG = { 
             CLIENT_ID: "1525287436198875266", 
             REDIRECT_URI: window.location.origin + window.location.pathname, 
@@ -915,91 +750,114 @@
         };
 
         window.addEventListener('DOMContentLoaded', () => {
+            initCanvasBackground();
             handleOAuthCallback();
             renderSiteContent();
             setupApplyFormFields();
 
-            if (state.currentUser) {
-                updateAuthUI();
-            }
-
-            // التحقق من حالة الأدمن عند تحميل الصفحة
-            if (state.isAdmin) {
-                document.getElementById('admin-tab-btn').style.display = 'flex';
-                document.getElementById('admin-login-btn').style.display = 'none';
-            } else {
-                document.getElementById('admin-tab-btn').style.display = 'none';
-            }
+            if (state.currentUser) updateAuthUI();
         });
 
-        function toggleCustomWebhookInput() {
-            const selectValue = document.getElementById('bot-webhook-target').value;
-            const container = document.getElementById('custom-webhook-container');
-            container.style.display = (selectValue === 'custom') ? 'block' : 'none';
-        }
+        /* Background Particle Effect */
+        function initCanvasBackground() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
 
-        function triggerWelcomeAnimation(isAdmin = false) {
-            const overlay = document.getElementById('welcome-popup-overlay');
-            const card = document.getElementById('welcome-card-box');
-            const title = document.getElementById('welcome-title-content');
-            const subtitle = document.getElementById('welcome-subtitle-content');
-
-            if (isAdmin) {
-                card.classList.add('admin-theme');
-                title.innerHTML = '✨ Welcome to Nova City (Admin) ✨';
-                subtitle.innerHTML = 'تم تسجيل الدخول بصلاحيات الإدارة العليا الكاملة 👑';
-            } else {
-                card.classList.remove('admin-theme');
-                title.innerHTML = '🎮 Welcome to Nova City (Member) 🎮';
-                subtitle.innerHTML = 'أهلاً بك مجدداً في عالم نوفا سيتي الواقعي! 🚀';
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            window.addEventListener('resize', resize);
+            resize();
 
-            overlay.style.display = 'flex';
-            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-                setTimeout(() => { overlay.style.display = 'none'; }, 500);
-            }, 3200);
-        }
-
-        // دالة الإرسال الفعلي لـ Discord Webhook
-        async function sendDiscordWebhook(webhookUrl, embedData) {
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        username: "Nova City System",
-                        avatar_url: "https://i.imgur.com/8N2vT8M.png",
-                        embeds: [embedData]
-                    })
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 1,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8
                 });
-                return response.ok;
-            } catch (err) {
-                console.error("Webhook Error:", err);
-                return false;
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(140, 82, 255, 0.5)';
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
+
+                particles.forEach((p, i) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        /* Modal Functions */
+        function openAdminModalOrTab() {
+            if (state.isAdmin) {
+                switchTab('admin-panel');
+            } else {
+                openAdminModal();
             }
         }
 
-        // إرسال رسالة الأدمن الفعلية للـ Webhook المحدد أو اليدوي
+        function openAdminModal() {
+            const modal = document.getElementById('admin-pass-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeAdminModal() {
+            const modal = document.getElementById('admin-pass-modal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 400);
+        }
+
+        function verifyAdminPassword() {
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === CONFIG.ADMIN_PASSWORD) {
+                state.isAdmin = true;
+                localStorage.setItem('nova_is_admin', 'true');
+                closeAdminModal();
+                switchTab('admin-panel');
+            } else {
+                alert("❌ كلمة المرور غير صحيحة!");
+            }
+        }
+
+        /* Discord Webhook Sending System */
         async function sendAdminCustomWebhookMsg() {
             if (!state.isAdmin) return;
 
-            const selectTarget = document.getElementById('bot-webhook-target').value;
-            let targetWebhook = "";
-
-            if (selectTarget === 'custom') {
-                targetWebhook = document.getElementById('custom-webhook-url').value.trim();
-            } else {
-                targetWebhook = selectTarget;
-            }
-
+            const webhookUrl = document.getElementById('custom-webhook-url').value.trim();
+            const avatarUrl = document.getElementById('bot-avatar-url').value.trim();
             const title = document.getElementById('bot-msg-title').value.trim();
             const content = document.getElementById('bot-msg-content').value.trim();
 
-            if (!targetWebhook || !targetWebhook.startsWith('http')) {
-                alert("يرجى كتابة أو اختيار رابط Webhook صحيح أولاً!");
+            if (!webhookUrl || !webhookUrl.startsWith('http')) {
+                alert("يرجى كتابة رابط Webhook صحيح أولاً!");
                 return;
             }
 
@@ -1011,21 +869,41 @@
             const embedData = {
                 title: `📢 ${title}`,
                 description: content,
-                color: 16721495,
-                footer: { text: "صادرة من لوحة تحكم Nova City RP الإدارية" },
+                color: 9196031, // Neon Purple / Pink Color
+                footer: { 
+                    text: "صادرة من موقع نوفا سيتي",
+                    icon_url: avatarUrl || "https://i.imgur.com/8N2vT8M.png"
+                },
                 timestamp: new Date().toISOString()
             };
 
-            const success = await sendDiscordWebhook(targetWebhook, embedData);
-            if (success) {
-                alert("✅ تم إرسال الرسالة بنجاح وبشكل فعلي إلى الروم بالديسكورد!");
-                document.getElementById('bot-msg-title').value = '';
-                document.getElementById('bot-msg-content').value = '';
-            } else {
-                alert("❌ حدث خطأ أثناء إرسال الرسالة، تأكد من صحة رابط الـ Webhook.");
+            const payload = {
+                username: "Nova City System",
+                avatar_url: avatarUrl || "https://i.imgur.com/8N2vT8M.png",
+                embeds: [embedData]
+            };
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert("✅ تم إرسال الرسالة بنجاح وبشكل فخم إلى ديسكورد!");
+                    document.getElementById('bot-msg-title').value = '';
+                    document.getElementById('bot-msg-content').value = '';
+                } else {
+                    alert("❌ حدث خطأ أثناء الإرسال. تأكد من صحة رابط الـ Webhook!");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ فشل الاتصال برابط الـ Webhook.");
             }
         }
 
+        /* OAuth & Auth UI */
         function initiateDiscordLogin() {
             const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=identify`;
             window.location.href = oauthUrl;
@@ -1046,10 +924,9 @@
                         localStorage.setItem('nova_user_data', JSON.stringify(state.currentUser));
                         window.location.hash = '';
                         updateAuthUI();
-                        triggerWelcomeAnimation(false);
                     }
                 })
-                .catch(err => console.error("OAuth Fetch Error:", err));
+                .catch(err => console.error(err));
             }
         }
 
@@ -1059,44 +936,13 @@
             }
         }
 
-        function openAdminModal() { document.getElementById('admin-pass-modal').style.display = 'flex'; }
-        function closeAdminModal() { document.getElementById('admin-pass-modal').style.display = 'none'; }
-
-        // التحقق من كلمة مرور الأدمن وحفظ الحالة
-        function verifyAdminPassword() {
-            const pass = document.getElementById('admin-password-input').value;
-            if (pass === CONFIG.ADMIN_PASSWORD) {
-                state.isAdmin = true;
-                localStorage.setItem('nova_is_admin', 'true');
-                closeAdminModal();
-                document.getElementById('admin-tab-btn').style.display = 'flex';
-                document.getElementById('admin-login-btn').style.display = 'none';
-                triggerWelcomeAnimation(true);
-            } else {
-                alert("كلمة المرور غير صحيحة!");
-            }
-        }
-
-        function switchTabWithTransition(tabId) {
-            // حماية كاملة: منع الدخول للوحة التحكم إذا لم يكن أدمن
+        /* Tab Switcher */
+        function switchTab(tabId) {
             if (tabId === 'admin-panel' && !state.isAdmin) {
-                alert("غير مصرح لك بالدخول إلى لوحة التحكم إلا بعد إدخال كلمة المرور!");
                 openAdminModal();
                 return;
             }
 
-            const overlay = document.getElementById('transition-overlay');
-            overlay.style.display = 'flex';
-            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-
-            setTimeout(() => {
-                switchTab(tabId);
-                overlay.style.opacity = '0';
-                setTimeout(() => { overlay.style.display = 'none'; }, 300);
-            }, 800);
-        }
-
-        function switchTab(tabId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
@@ -1108,10 +954,11 @@
             if (tabId === 'admin-panel') renderAdminPanel();
         }
 
+        /* Render Page Contents */
         function renderSiteContent() {
             document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules || 'لا توجد قوانين مسجلة حالياً.'}</p>`;
             document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px; font-size:1.05rem; line-height:1.9;">${state.siteData.info || 'لا توجد معلومات عامة حالياً.'}</p>`;
-            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات <i class="fa-solid fa-fire fire-animated-icon"></i></h2><p style="white-space: pre-line; margin-top:15px; font-weight:800; font-size:1.2rem; color:var(--purple-glow);">${state.siteData.partners || 'لا توجد شراكات مسجلة حالياً.'}</p>`;
+            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px; font-weight:800; font-size:1.2rem; color:var(--purple-glow);">${state.siteData.partners || 'لا توجد شراكات مسجلة حالياً.'}</p>`;
 
             document.getElementById('edit-rules-input').value = state.siteData.rules;
             document.getElementById('edit-info-input').value = state.siteData.info;
@@ -1126,28 +973,23 @@
 
             localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
             renderSiteContent();
-            alert("تم حفظ المحتوى المعدل ونشره بجميع أجزاء الموقع!");
+            alert("تم حفظ التعديلات ونشرها بنفس اللحظة!");
         }
 
         function clearContent(section) {
             if (!state.isAdmin) return;
-            if (confirm("هل أنت تأكد من إزالة ومسح هذا النص بالكامل من الموقع؟")) {
+            if (confirm("هل أنت تأكد من إزالة هذا النص؟")) {
                 state.siteData[section] = "";
                 localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
                 renderSiteContent();
-                alert("تم حذف النص بالكامل!");
             }
         }
 
+        /* Tickets & Apply Handling */
         function selectTicketCategory(element, category) {
             document.querySelectorAll('.ticket-type-btn').forEach(btn => btn.classList.remove('selected'));
             element.classList.add('selected');
             state.selectedCategory = category;
-        }
-
-        function toggleAuthFields() {
-            const method = document.getElementById('auth-method-select').value;
-            document.getElementById('manual-auth-inputs').style.display = method === 'manual' ? 'block' : 'none';
         }
 
         async function handleGeneralTicketSubmit(e) {
@@ -1157,23 +999,9 @@
                 return;
             }
 
-            const authMethod = document.getElementById('auth-method-select').value;
-            let userId = "", username = "";
-
-            if (authMethod === 'oauth') {
-                if (!state.currentUser) {
-                    alert("يرجى ربط حساب الديسكورد أولاً أو اختيار الإدخال اليدوي!");
-                    return;
-                }
-                userId = state.currentUser.id;
-                username = state.currentUser.username;
-            } else {
-                userId = document.getElementById('manual-user-id').value;
-                username = document.getElementById('manual-username').value;
-                if (!userId || !username) {
-                    alert("يرجى إدخال الـ User ID واسم الحساب!");
-                    return;
-                }
+            if (!state.currentUser) {
+                alert("يرجى ربط حساب الديسكورد أولاً!");
+                return;
             }
 
             const details = document.getElementById('ticket-details-input').value;
@@ -1181,10 +1009,10 @@
             const newTicket = {
                 id: 'TICK-' + Date.now().toString().slice(-6),
                 category: state.selectedCategory,
-                userId: userId,
-                username: username,
+                userId: state.currentUser.id,
+                username: state.currentUser.username,
                 details: details,
-                status: 'مفتوحة (قيد المراجعة)',
+                status: 'مفتوحة',
                 date: new Date().toLocaleString('ar-EG'),
                 replies: []
             };
@@ -1192,26 +1020,9 @@
             state.tickets.push(newTicket);
             localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
 
-            const targetWebhook = WEBHOOKS[state.selectedCategory] || WEBHOOKS["default"];
-
-            const embedData = {
-                title: `🎫 تذكرة جديدة: ${newTicket.category}`,
-                color: 8133887,
-                fields: [
-                    { name: "رقم التذكرة", value: newTicket.id, inline: true },
-                    { name: "صاحب التذكرة", value: `${newTicket.username} (<@${newTicket.userId}>)`, inline: true },
-                    { name: "الـ User ID", value: newTicket.userId, inline: true },
-                    { name: "التفاصيل والطلب", value: newTicket.details }
-                ],
-                footer: { text: "Nova City RP Web System" },
-                timestamp: new Date().toISOString()
-            };
-
-            await sendDiscordWebhook(targetWebhook, embedData);
-
-            alert(`تم إرسال تذكرتك بنجاح وبشكل تام للديسكورد والموقع!\nرقم التذكرة: ${newTicket.id}`);
+            alert(`تم إنشاء التذكرة بنجاح!\nرقم التذكرة: ${newTicket.id}`);
             e.target.reset();
-            switchTabWithTransition('user-tickets');
+            switchTab('user-tickets');
         }
 
         function sendReplyToTicket(ticketId, isFromAdmin) {
@@ -1248,7 +1059,7 @@
 
             myTickets.forEach(t => {
                 let repliesHtml = '';
-                t.replies.forEach(r => {
+                (t.replies || []).forEach(r => {
                     repliesHtml += `<div class="chat-msg ${r.isAdmin ? 'admin' : 'user'}"><strong>${r.sender}:</strong> ${r.text} <span style="font-size:0.7rem; color:#aaa;">(${r.time})</span></div>`;
                 });
 
@@ -1259,7 +1070,7 @@
                                 <h3 style="color:var(--purple-glow);">${t.category} (${t.id})</h3>
                                 <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date}</span>
                             </div>
-                            <span class="ticket-badge status-open">${t.status}</span>
+                            <span class="ticket-badge">${t.status}</span>
                         </div>
                         <p style="margin-top:10px; font-size:0.95rem;"><strong>الطلب الأصلي:</strong> ${t.details}</p>
                         
@@ -1302,7 +1113,7 @@
         async function handleApplicationSubmit(e) {
             e.preventDefault();
             if (!state.currentUser) {
-                alert("يرجى ربط حساب الديسكورد أولاً لرفع طلب تقديم!");
+                alert("يرجى ربط حساب الديسكورد أولاً!");
                 return;
             }
 
@@ -1336,23 +1147,9 @@
             state.applications.push(newApp);
             localStorage.setItem('nova_applications', JSON.stringify(state.applications));
 
-            const embedData = {
-                title: `📝 تقديم جديد: ${newApp.type}`,
-                color: 16738743,
-                fields: [
-                    { name: "رقم التقديم", value: newApp.id, inline: true },
-                    { name: "مقدم الطلب", value: `${newApp.applicantName} (${newApp.username})`, inline: true },
-                    { name: "الـ Discord ID", value: newApp.userId, inline: true }
-                ],
-                footer: { text: "Nova City RP Web System" },
-                timestamp: new Date().toISOString()
-            };
-
-            await sendDiscordWebhook(WEBHOOKS["default"], embedData);
-
-            alert("تم إرسال طلب التقديم بنجاح بالكامل!");
+            alert("تم إرسال طلب التقديم بنجاح!");
             e.target.reset();
-            switchTabWithTransition('app-tickets');
+            switchTab('app-tickets');
         }
 
         function renderUserAppTickets() {
@@ -1373,7 +1170,7 @@
                                 <h3 style="color:var(--purple-glow);">${a.type} (${a.id})</h3>
                                 <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${a.date}</span>
                             </div>
-                            <span class="ticket-badge status-open">${a.status}</span>
+                            <span class="ticket-badge">${a.status}</span>
                         </div>
                         <div style="margin-top:10px;">${answersHtml}</div>
                     </div>`;
@@ -1396,7 +1193,7 @@
                                 <h4 style="color:var(--gold-accent);">${a.type} - ${a.applicantName}</h4>
                                 <span style="font-size:0.75rem; color:#aaa;">اسم الحساب: ${a.username} | ID: ${a.userId}</span>
                             </div>
-                            <span class="ticket-badge status-open">${a.status}</span>
+                            <span class="ticket-badge">${a.status}</span>
                         </div>
                         <div style="background: rgba(0,0,0,0.3); padding:10px; border-radius:8px;">${answersHtml}</div>
                     </div>`;
@@ -1418,7 +1215,7 @@
                                 <h4 style="color:var(--purple-glow);">${t.category} (${t.id})</h4>
                                 <span style="font-size:0.75rem; color:#aaa;">المرسل: ${t.username} | ID: ${t.userId}</span>
                             </div>
-                            <span class="ticket-badge status-open">${t.status}</span>
+                            <span class="ticket-badge">${t.status}</span>
                         </div>
                         <p style="font-size:0.88rem; margin:8px 0;"><strong>الطلب:</strong> ${t.details}</p>
                         
