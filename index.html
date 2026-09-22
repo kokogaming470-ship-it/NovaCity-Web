@@ -29,6 +29,7 @@
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
             user-select: none;
+            transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         body {
@@ -41,6 +42,57 @@
                 radial-gradient(circle at 90% 90%, rgba(255, 71, 87, 0.15) 0%, transparent 45%),
                 radial-gradient(circle at 50% 50%, rgba(18, 7, 43, 0.9) 0%, #05020a 100%);
             background-attachment: fixed;
+        }
+
+        /* Full Page Welcome Overlay Animation */
+        #welcome-popup-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 1, 8, 0.95);
+            backdrop-filter: blur(25px);
+            z-index: 1000000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .welcome-card-anim {
+            background: linear-gradient(135deg, rgba(18, 7, 43, 0.95) 0%, rgba(35, 12, 70, 0.95) 100%);
+            border: 2px solid var(--purple-glow);
+            box-shadow: 0 0 50px rgba(124, 92, 255, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.2);
+            padding: 45px;
+            border-radius: 28px;
+            text-align: center;
+            transform: scale(0.7);
+            animation: popupBounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .welcome-card-anim.admin-theme {
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 71, 87, 0.4);
+        }
+
+        .welcome-title-text {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 20px var(--purple-glow);
+            margin-bottom: 10px;
+        }
+
+        .welcome-card-anim.admin-theme .welcome-title-text {
+            background: linear-gradient(135deg, #ffd700 0%, #ff4757 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+        }
+
+        @keyframes popupBounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         /* Launch Intro Screen */
@@ -143,6 +195,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
+            animation: pulseGlow 2s infinite alternate;
         }
 
         nav {
@@ -163,7 +216,6 @@
             font-size: 0.88rem;
             border-radius: 9px;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -173,7 +225,7 @@
             color: #fff;
             background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%);
             box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .auth-controls {
@@ -194,13 +246,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
         }
 
         .btn-auth:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
         }
 
         .btn-admin-login {
@@ -215,12 +266,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
         }
 
         .btn-admin-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
         }
 
         /* Modal */
@@ -243,6 +293,7 @@
             width: 90%;
             max-width: 450px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            animation: popupBounceIn 0.5s ease forwards;
         }
 
         .modal-title {
@@ -278,12 +329,11 @@
             color: #fff;
             font-size: 0.95rem;
             outline: none;
-            transition: border 0.3s ease;
         }
 
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--purple-glow);
-            box-shadow: 0 0 10px rgba(179, 136, 255, 0.3);
+            box-shadow: 0 0 15px rgba(179, 136, 255, 0.4);
         }
 
         /* Main Area */
@@ -312,6 +362,12 @@
             border-radius: 24px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: floatBanner 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBanner {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-8px); }
         }
 
         .hero-title {
@@ -341,6 +397,28 @@
             padding: 30px;
             margin-bottom: 25px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editable-content-box:hover {
+            border-color: var(--purple-glow);
+            box-shadow: 0 10px 35px rgba(124, 92, 255, 0.3);
+        }
+
+        /* Animated Flame Icon in Partnerships */
+        .fire-animated-icon {
+            color: #ff4757;
+            font-size: 2.2rem;
+            margin-left: 10px;
+            display: inline-block;
+            animation: firePulse 1.2s infinite alternate;
+            filter: drop-shadow(0 0 10px #ff4757);
+        }
+
+        @keyframes firePulse {
+            0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 8px #ff4757); }
+            100% { transform: scale(1.25) rotate(5deg); filter: drop-shadow(0 0 20px #ff6b81); }
         }
 
         .ticket-creator-box {
@@ -370,7 +448,6 @@
             text-align: center;
             font-weight: 700;
             font-size: 0.9rem;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -382,7 +459,7 @@
             color: #fff;
             border-color: var(--purple-glow);
             box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
         }
 
         /* Two Columns Layout For Admin Dashboard */
@@ -429,6 +506,11 @@
             border-radius: 16px;
             padding: 20px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--purple-glow);
         }
 
         .ticket-header {
@@ -503,6 +585,11 @@
             cursor: pointer;
         }
 
+        .btn-reply-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--purple-glow);
+        }
+
         /* Direct Action Buttons */
         .btn-action-submit {
             width: 100%;
@@ -515,7 +602,6 @@
             font-weight: 800;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -523,8 +609,8 @@
         }
 
         .btn-action-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(124, 92, 255, 0.6);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 8px 25px rgba(124, 92, 255, 0.7);
         }
 
         .btn-danger-clear {
@@ -536,6 +622,11 @@
             font-weight: 800;
             cursor: pointer;
             margin-top: 10px;
+        }
+
+        .btn-danger-clear:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5);
         }
 
         footer {
@@ -552,6 +643,14 @@
 </head>
 <body>
 
+    <!-- Cinematic Welcome Popup Animation -->
+    <div id="welcome-popup-overlay">
+        <div class="welcome-card-anim" id="welcome-card-box">
+            <div class="welcome-title-text" id="welcome-title-content">Welcome to Nova City</div>
+            <p id="welcome-subtitle-content" style="color: #c0c0e0; font-size: 1.2rem; font-weight: 700;">نتمنى لك تجربة واقعية ممتازة وممتعة داخل المدينة 🚀</p>
+        </div>
+    </div>
+
     <!-- Launch Intro -->
     <div id="intro-overlay">
         <div class="intro-title">Welcome to Nova City RP</div>
@@ -563,7 +662,7 @@
 
     <!-- Transition Overlay -->
     <div id="transition-overlay">
-        <i class="fa-solid fa-fire" style="font-size: 3.5rem; color: #ff4757; margin-bottom: 12px;"></i>
+        <i class="fa-solid fa-fire fire-animated-icon" style="font-size: 3.5rem;"></i>
         <div class="fire-text">NOVA CITY ON FIRE</div>
     </div>
 
@@ -655,7 +754,6 @@
                 <form id="apply-form-element" onsubmit="handleApplicationSubmit(event)">
                     <div id="dynamic-apply-fields"></div>
                     
-                    <!-- Send Application Button -->
                     <button type="submit" class="btn-action-submit" style="margin-top: 20px;">
                         <i class="fa-solid fa-paper-plane"></i> إرسال طلب التقديم الآن
                     </button>
@@ -708,7 +806,6 @@
                         <textarea id="ticket-details-input" rows="4" placeholder="اكتب تفاصيل طلبك أو استفسارك هنا..." required></textarea>
                     </div>
 
-                    <!-- Send Ticket Button -->
                     <button type="submit" class="btn-action-submit">
                         <i class="fa-solid fa-paper-plane"></i> إرسال وإنشاء التذكرة الآن
                     </button>
@@ -736,6 +833,22 @@
         <!-- Advanced Admin Control Panel -->
         <section id="admin-panel" class="page-section">
             <h2 style="color: #ff4757; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية والإدارة المباشرة</h2>
+
+            <!-- Bot Control & Webhook Dispatcher -->
+            <div class="editable-content-box" style="border-color: var(--purple-glow); margin-bottom: 30px;">
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-robot"></i> قسم التحكم بالبوت وإرسال الرسائل (Webhook Dispatcher)</h3>
+                <div class="form-group">
+                    <label>عنوان الرسالة (Title):</label>
+                    <input type="text" id="bot-msg-title" placeholder="مثال: إعلان هام من إداريي السيرفر">
+                </div>
+                <div class="form-group">
+                    <label>محتوى الرسالة (Description):</label>
+                    <textarea id="bot-msg-content" rows="4" placeholder="اكتب النص الذي تريد للبوت إرساله..."></textarea>
+                </div>
+                <button class="btn-action-submit" onclick="sendAdminCustomWebhookMsg()">
+                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة عبر البوت الآن
+                </button>
+            </div>
 
             <!-- Split Two-Column Layout -->
             <div class="admin-split-grid">
@@ -821,8 +934,8 @@
             applications: JSON.parse(localStorage.getItem('nova_applications') || '[]'),
             siteData: JSON.parse(localStorage.getItem('nova_site_content') || JSON.stringify({
                 rules: "1. يمنع منعاً باتاً RDM و VDM.\n2. الالتزام الكامل بتمثيل الشخصية داخل السيرفر.\n3. احترام جميع الأعضاء والإدارة.",
-                info: "مدينة نوفا هي أول مدينة عربية واقعية تنشأ داخل عالم ماينكرافت الجافا، حيث تقدم تجربة رول بلاي متكاملة.",
-                partners: "شراكات نوفا سيتي الرسمية 🔥"
+                info: "🏙️ مدينة نوفا – Nova City\nمرحبًا بكم في مدينة نوفا 🌍\nمدينة نوفا هي أول مدينة عربية واقعية تنشأ داخل عالم ماينكرافت، حيث تقدم تجربة حياة واقعية ممتعة وتفاعلية للاعبين.\n✨ تم تصميم المدينة لتناسب جميع اللاعبين سواء على النسخة المكركة أو الأصلية، وتدعم Java Edition .\n🎮 استمتع بالعيش داخل المدينة، تكوين صداقات، المشاركة في الفعاليات، وبناء حياتك الخاصة داخل عالم نوفا.\n⚠️ نتمنى لكم تجربة ممتعة وحظًا موفقًا داخل المدينة!",
+                partners: "كَمينج سون (K)"
             }))
         };
 
@@ -841,7 +954,31 @@
             }
         });
 
-        // Send Message Embed to Discord Webhook
+        function triggerWelcomeAnimation(isAdmin = false) {
+            const overlay = document.getElementById('welcome-popup-overlay');
+            const card = document.getElementById('welcome-card-box');
+            const title = document.getElementById('welcome-title-content');
+            const subtitle = document.getElementById('welcome-subtitle-content');
+
+            if (isAdmin) {
+                card.classList.add('admin-theme');
+                title.innerHTML = '✨ Welcome to Nova City (Admin) ✨';
+                subtitle.innerHTML = 'تم تسجيل الدخول بصلاحيات الإدارة العليا الكاملة 👑';
+            } else {
+                card.classList.remove('admin-theme');
+                title.innerHTML = '🎮 Welcome to Nova City (Member) 🎮';
+                subtitle.innerHTML = 'أهلاً بك مجدداً في عالم نوفا سيتي الواقعي! 🚀';
+            }
+
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.opacity = '1'; }, 10);
+
+            setTimeout(() => {
+                overlay.style.opacity = '0';
+                setTimeout(() => { overlay.style.display = 'none'; }, 500);
+            }, 3000);
+        }
+
         async function sendDiscordWebhook(webhookUrl, embedData) {
             try {
                 const response = await fetch(webhookUrl, {
@@ -857,6 +994,33 @@
             } catch (err) {
                 console.error("Webhook Error:", err);
                 return false;
+            }
+        }
+
+        async function sendAdminCustomWebhookMsg() {
+            const title = document.getElementById('bot-msg-title').value.trim();
+            const content = document.getElementById('bot-msg-content').value.trim();
+
+            if (!title || !content) {
+                alert("يرجى كتابة العنوان والمحتوى للرسالة أولاً!");
+                return;
+            }
+
+            const embedData = {
+                title: `📢 ${title}`,
+                description: content,
+                color: 8133887,
+                footer: { text: "صادرة من لوحة تحكم Nova City RP" },
+                timestamp: new Date().toISOString()
+            };
+
+            const success = await sendDiscordWebhook(WEBHOOKS["default"], embedData);
+            if (success) {
+                alert("تم إرسال الرسالة عبر البوت بنجاح إلى الديسكورد!");
+                document.getElementById('bot-msg-title').value = '';
+                document.getElementById('bot-msg-content').value = '';
+            } else {
+                alert("حدث خطأ أثناء محاولة إرسال الرسالة عبر الـ Webhook.");
             }
         }
 
@@ -880,6 +1044,7 @@
                         localStorage.setItem('nova_user_data', JSON.stringify(state.currentUser));
                         window.location.hash = '';
                         updateAuthUI();
+                        triggerWelcomeAnimation(false);
                     }
                 })
                 .catch(err => console.error("OAuth Fetch Error:", err));
@@ -903,7 +1068,7 @@
                 localStorage.setItem('nova_is_admin', 'true');
                 closeAdminModal();
                 document.getElementById('admin-tab-btn').style.display = 'flex';
-                alert("تم تسجيل الدخول كـ أدمن بنجاح!");
+                triggerWelcomeAnimation(true);
             } else {
                 alert("كلمة المرور غير صحيحة!");
             }
@@ -933,11 +1098,10 @@
             if (tabId === 'admin-panel') renderAdminPanel();
         }
 
-        // Render & Save Content Modifications
         function renderSiteContent() {
             document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules || 'لا توجد قوانين مسجلة حالياً.'}</p>`;
-            document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.info || 'لا توجد معلومات عامة حالياً.'}</p>`;
-            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.partners || 'لا توجد شراكات مسجلة حالياً.'}</p>`;
+            document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px; font-size:1.05rem; line-height:1.9;">${state.siteData.info || 'لا توجد معلومات عامة حالياً.'}</p>`;
+            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات <i class="fa-solid fa-fire fire-animated-icon"></i></h2><p style="white-space: pre-line; margin-top:15px; font-weight:800; font-size:1.2rem; color:var(--purple-glow);">${state.siteData.partners || 'لا توجد شراكات مسجلة حالياً.'}</p>`;
 
             document.getElementById('edit-rules-input').value = state.siteData.rules;
             document.getElementById('edit-info-input').value = state.siteData.info;
@@ -976,7 +1140,6 @@
             document.getElementById('manual-auth-inputs').style.display = method === 'manual' ? 'block' : 'none';
         }
 
-        // Submitting General Ticket
         async function handleGeneralTicketSubmit(e) {
             e.preventDefault();
             if (!state.selectedCategory) {
@@ -1041,7 +1204,6 @@
             switchTabWithTransition('user-tickets');
         }
 
-        // Interactive Reply System inside Tickets
         function sendReplyToTicket(ticketId, isFromAdmin) {
             const inputId = isFromAdmin ? `admin-reply-${ticketId}` : `user-reply-${ticketId}`;
             const inputElem = document.getElementById(inputId);
@@ -1104,7 +1266,6 @@
             });
         }
 
-        // Application Forms Setup
         function toggleApplyFormType() { setupApplyFormFields(); }
 
         function setupApplyFormFields() {
@@ -1209,11 +1370,9 @@
             });
         }
 
-        // Split Admin Control Panel Rendering
         function renderAdminPanel() {
             if (!state.isAdmin) return;
 
-            // Render Applications (Right Side)
             const appContainer = document.getElementById('admin-app-tickets-list');
             appContainer.innerHTML = state.applications.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تقديمات بانتظار العرض.</p>' : '';
 
@@ -1233,7 +1392,6 @@
                     </div>`;
             });
 
-            // Render General Tickets & Support Chat (Left Side)
             const genContainer = document.getElementById('admin-general-tickets-list');
             genContainer.innerHTML = state.tickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر دعم عامة.</p>' : '';
 
