@@ -44,7 +44,7 @@
             background-attachment: fixed;
         }
 
-        /* Ultra Premium Welcome Overlay Animation */
+        /* Welcome Overlay Animation */
         #welcome-popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -73,16 +73,6 @@
             overflow: hidden;
         }
 
-        .welcome-card-anim::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            transform: rotate(45deg);
-            animation: shineLight 4s infinite linear;
-            pointer-events: none;
-        }
-
         .welcome-card-anim.admin-theme {
             border-color: var(--gold-accent);
             box-shadow: 0 0 100px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 71, 87, 0.5), inset 0 0 25px rgba(255, 215, 0, 0.3);
@@ -95,7 +85,6 @@
             color: #fff;
             text-shadow: 0 0 25px var(--purple-glow);
             margin-bottom: 12px;
-            letter-spacing: 1px;
         }
 
         .welcome-card-anim.admin-theme .welcome-title-text {
@@ -108,11 +97,6 @@
         @keyframes popup3dBounce {
             0% { transform: scale(0.5) rotateX(30deg) translateY(100px); opacity: 0; }
             100% { transform: scale(1) rotateX(0deg) translateY(0); opacity: 1; }
-        }
-
-        @keyframes shineLight {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         /* Launch Intro Screen */
@@ -215,7 +199,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(124, 92, 255, 0.5);
-            animation: pulseGlow 2s infinite alternate;
         }
 
         nav {
@@ -266,12 +249,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
-        }
-
-        .btn-auth:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
         }
 
         .btn-admin-login {
@@ -286,11 +263,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .btn-admin-login:hover {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
         }
 
         /* Modal */
@@ -382,12 +354,6 @@
             border-radius: 24px;
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            animation: floatBanner 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatBanner {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-8px); }
         }
 
         .hero-title {
@@ -418,27 +384,19 @@
             margin-bottom: 25px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             position: relative;
-            overflow: hidden;
         }
 
-        .editable-content-box:hover {
-            border-color: var(--purple-glow);
-            box-shadow: 0 10px 35px rgba(124, 92, 255, 0.3);
-        }
-
-        /* Animated Flame Icon in Partnerships */
         .fire-animated-icon {
             color: #ff4757;
             font-size: 2.2rem;
             margin-left: 10px;
             display: inline-block;
             animation: firePulse 1.2s infinite alternate;
-            filter: drop-shadow(0 0 10px #ff4757);
         }
 
         @keyframes firePulse {
-            0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 8px #ff4757); }
-            100% { transform: scale(1.25) rotate(5deg); filter: drop-shadow(0 0 20px #ff6b81); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 8px #ff4757); }
+            100% { transform: scale(1.25); filter: drop-shadow(0 0 20px #ff6b81); }
         }
 
         .ticket-creator-box {
@@ -448,7 +406,6 @@
             padding: 35px;
             max-width: 750px;
             margin: 0 auto;
-            box-shadow: 0 12px 35px rgba(124, 92, 255, 0.15);
         }
 
         .ticket-type-grid {
@@ -478,11 +435,8 @@
             background: var(--purple-primary);
             color: #fff;
             border-color: var(--purple-glow);
-            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
-            transform: translateY(-3px) scale(1.02);
         }
 
-        /* Two Columns Layout For Admin Dashboard */
         .admin-split-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -499,7 +453,6 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 22px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .admin-column-header {
@@ -525,12 +478,6 @@
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .ticket-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--purple-glow);
         }
 
         .ticket-header {
@@ -551,7 +498,6 @@
 
         .status-open { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid #3498db; }
 
-        /* Chat / Replies Section */
         .chat-thread-box {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -605,12 +551,6 @@
             cursor: pointer;
         }
 
-        .btn-reply-send:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px var(--purple-glow);
-        }
-
-        /* Direct Action Buttons */
         .btn-action-submit {
             width: 100%;
             padding: 14px;
@@ -628,11 +568,6 @@
             gap: 10px;
         }
 
-        .btn-action-submit:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 8px 25px rgba(124, 92, 255, 0.7);
-        }
-
         .btn-danger-clear {
             background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
             color: #fff;
@@ -644,11 +579,6 @@
             margin-top: 10px;
         }
 
-        .btn-danger-clear:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.5);
-        }
-
         footer {
             text-align: center;
             padding: 22px;
@@ -658,7 +588,7 @@
         }
 
         .copyright { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; margin-bottom: 5px; }
-        .powered-by { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 800; letter-spacing: 1px; }
+        .powered-by { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -717,6 +647,7 @@
             <button class="nav-btn" onclick="switchTabWithTransition('user-tickets')"><i class="fa-solid fa-ticket"></i> التذاكر</button>
             <button class="nav-btn" onclick="switchTabWithTransition('app-tickets')"><i class="fa-solid fa-clipboard-check"></i> تذاكر التقديمات</button>
             <button class="nav-btn" onclick="switchTabWithTransition('partners')"><i class="fa-solid fa-handshake"></i> الشراكات</button>
+            <!-- زر لوحة التحكم مخفي افتراضياً ولن يظهر إطلاقاً إلا بعد الدخول بكلمة السر -->
             <button class="nav-btn" onclick="switchTabWithTransition('admin-panel')" id="admin-tab-btn" style="display: none; color: #ff4757;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم</button>
         </nav>
 
@@ -859,8 +790,9 @@
                 <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-robot"></i> قسم التحكم بالبوت وإرسال الرسائل (Webhook Dispatcher)</h3>
                 
                 <div class="form-group">
-                    <label>اختر القناة / الروم المستهدفة في الديسكورد:</label>
-                    <select id="bot-webhook-target">
+                    <label>اختر القناة / الروم أو أدخل الرابط يدوياً:</label>
+                    <select id="bot-webhook-target" onchange="toggleCustomWebhookInput()">
+                        <option value="custom">✏️ إدخال رابط Webhook يدويًا (Custom Webhook URL)</option>
                         <option value="https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE">دعم فني / إعلانات عامة</option>
                         <option value="https://discord.com/api/webhooks/1551998295768043600/Y0YS5YHzYclYTUhmOyE4nEdzDVAykqCihRicpjw-aFTjwsUuQd0a7VxVKEsZYBhTm430">طلبات انضمام للشرطة</option>
                         <option value="https://discord.com/api/webhooks/1551998182341353594/GA_VMRcmieKrD88NozYslJknx5ofXx165-fc6kelnEPBbMspHy1YLL9SZNhOta197cHa">طلبات انضمام للمطافي</option>
@@ -873,6 +805,12 @@
                     </select>
                 </div>
 
+                <!-- المكان المخصص لكتابة الـ Webhook يدوياً -->
+                <div class="form-group" id="custom-webhook-container">
+                    <label style="color: #ffd700;"><i class="fa-solid fa-link"></i> رابط الـ Webhook الخاص بالروم المراد الإرسال إليها:</label>
+                    <input type="url" id="custom-webhook-url" placeholder="https://discord.com/api/webhooks/..." style="border-color: #ffd700;">
+                </div>
+
                 <div class="form-group">
                     <label>عنوان الرسالة (Title):</label>
                     <input type="text" id="bot-msg-title" placeholder="مثال: إعلان هام من إدارة Nova City RP">
@@ -880,11 +818,11 @@
                 
                 <div class="form-group">
                     <label>محتوى الرسالة (Description):</label>
-                    <textarea id="bot-msg-content" rows="4" placeholder="اكتب النص الذي تريد للبوت إرساله..."></textarea>
+                    <textarea id="bot-msg-content" rows="4" placeholder="اكتب النص الذي تريد للبوت إرساله للروم بالديسكورد..."></textarea>
                 </div>
 
                 <button class="btn-action-submit" onclick="sendAdminCustomWebhookMsg()">
-                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة عبر البوت الآن
+                    <i class="fa-solid fa-paper-plane"></i> إرسال الرسالة عبر الـ Webhook الآن
                 </button>
             </div>
 
@@ -944,7 +882,6 @@
 
     <!-- JavaScript Engine -->
     <script>
-        // WEBHOOKS CONFIGURATION BY CATEGORY
         const WEBHOOKS = {
             "دعم فني": "https://discord.com/api/webhooks/1551998408573591724/Hj9NYmKczKHCkBgcEbCW9lnj1jNNhPteazPEsCLifXB1CU3q1w5V_NX4UT6Q2PXVI8uE",
             "طلب انضمام إلى الشرطة": "https://discord.com/api/webhooks/1551998295768043600/Y0YS5YHzYclYTUhmOyE4nEdzDVAykqCihRicpjw-aFTjwsUuQd0a7VxVKEsZYBhTm430",
@@ -986,11 +923,20 @@
                 updateAuthUI();
             }
 
+            // التحقق من حالة الأدمن عند تحميل الصفحة
             if (state.isAdmin) {
                 document.getElementById('admin-tab-btn').style.display = 'flex';
                 document.getElementById('admin-login-btn').style.display = 'none';
+            } else {
+                document.getElementById('admin-tab-btn').style.display = 'none';
             }
         });
+
+        function toggleCustomWebhookInput() {
+            const selectValue = document.getElementById('bot-webhook-target').value;
+            const container = document.getElementById('custom-webhook-container');
+            container.style.display = (selectValue === 'custom') ? 'block' : 'none';
+        }
 
         function triggerWelcomeAnimation(isAdmin = false) {
             const overlay = document.getElementById('welcome-popup-overlay');
@@ -1017,6 +963,7 @@
             }, 3200);
         }
 
+        // دالة الإرسال الفعلي لـ Discord Webhook
         async function sendDiscordWebhook(webhookUrl, embedData) {
             try {
                 const response = await fetch(webhookUrl, {
@@ -1035,15 +982,29 @@
             }
         }
 
+        // إرسال رسالة الأدمن الفعلية للـ Webhook المحدد أو اليدوي
         async function sendAdminCustomWebhookMsg() {
             if (!state.isAdmin) return;
 
-            const targetWebhook = document.getElementById('bot-webhook-target').value;
+            const selectTarget = document.getElementById('bot-webhook-target').value;
+            let targetWebhook = "";
+
+            if (selectTarget === 'custom') {
+                targetWebhook = document.getElementById('custom-webhook-url').value.trim();
+            } else {
+                targetWebhook = selectTarget;
+            }
+
             const title = document.getElementById('bot-msg-title').value.trim();
             const content = document.getElementById('bot-msg-content').value.trim();
 
+            if (!targetWebhook || !targetWebhook.startsWith('http')) {
+                alert("يرجى كتابة أو اختيار رابط Webhook صحيح أولاً!");
+                return;
+            }
+
             if (!title || !content) {
-                alert("يرجى كتابة العنوان والمحتوى للرسالة أولاً!");
+                alert("يرجى كتابة العنوان والمحتوى للرسالة!");
                 return;
             }
 
@@ -1057,11 +1018,11 @@
 
             const success = await sendDiscordWebhook(targetWebhook, embedData);
             if (success) {
-                alert("تم إرسال الرسالة عبر البوت بنجاح إلى الروم المحددة بالديسكورد!");
+                alert("✅ تم إرسال الرسالة بنجاح وبشكل فعلي إلى الروم بالديسكورد!");
                 document.getElementById('bot-msg-title').value = '';
                 document.getElementById('bot-msg-content').value = '';
             } else {
-                alert("حدث خطأ أثناء محاولة إرسال الرسالة عبر الـ Webhook.");
+                alert("❌ حدث خطأ أثناء إرسال الرسالة، تأكد من صحة رابط الـ Webhook.");
             }
         }
 
@@ -1101,6 +1062,7 @@
         function openAdminModal() { document.getElementById('admin-pass-modal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('admin-pass-modal').style.display = 'none'; }
 
+        // التحقق من كلمة مرور الأدمن وحفظ الحالة
         function verifyAdminPassword() {
             const pass = document.getElementById('admin-password-input').value;
             if (pass === CONFIG.ADMIN_PASSWORD) {
@@ -1116,6 +1078,13 @@
         }
 
         function switchTabWithTransition(tabId) {
+            // حماية كاملة: منع الدخول للوحة التحكم إذا لم يكن أدمن
+            if (tabId === 'admin-panel' && !state.isAdmin) {
+                alert("غير مصرح لك بالدخول إلى لوحة التحكم إلا بعد إدخال كلمة المرور!");
+                openAdminModal();
+                return;
+            }
+
             const overlay = document.getElementById('transition-overlay');
             overlay.style.display = 'flex';
             setTimeout(() => { overlay.style.opacity = '1'; }, 10);
@@ -1166,7 +1135,7 @@
                 state.siteData[section] = "";
                 localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
                 renderSiteContent();
-                alert("تم حذف النص بالكامل بجد!");
+                alert("تم حذف النص بالكامل!");
             }
         }
 
@@ -1464,3 +1433,7 @@
                         </div>
                     </div>`;
             });
+        }
+    </script>
+</body>
+</html>
