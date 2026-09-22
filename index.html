@@ -20,6 +20,7 @@
             --glass-border: rgba(124, 92, 255, 0.35);
             --fire-color: #ff4757;
             --gold-accent: #ffd700;
+            --green-success: #2ed573;
         }
 
         * {
@@ -89,39 +90,6 @@
             background: linear-gradient(90deg, var(--purple-primary), var(--fire-color));
             box-shadow: 0 0 15px var(--purple-glow);
             animation: fillProgress 2.2s ease-in-out forwards 1.4s;
-        }
-
-        /* Custom Login Intro Animations */
-        #login-intro-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #170938 0%, #030108 100%);
-            z-index: 888888;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .login-intro-title {
-            font-size: 3.2rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 25px var(--purple-primary), 0 0 50px var(--purple-glow);
-        }
-
-        .login-intro-role {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--gold-accent);
-            background: rgba(124, 92, 255, 0.25);
-            padding: 8px 25px;
-            border-radius: 30px;
-            border: 1px solid var(--glass-border);
-            margin-top: 15px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
 
         /* Transition Overlay */
@@ -255,7 +223,7 @@
             box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
         }
 
-        /* Modals & Forms */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -417,58 +385,157 @@
             transform: translateY(-2px);
         }
 
+        /* Two Columns Layout For Admin Dashboard */
+        .admin-split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .admin-split-grid { grid-template-columns: 1fr; }
+        }
+
+        .admin-column-box {
+            background: rgba(12, 4, 30, 0.9);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .admin-column-header {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--purple-glow);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .tickets-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-top: 20px;
         }
 
         .ticket-card {
             background: var(--bg-card);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 22px;
+            padding: 20px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
         }
-
-        .ticket-card:hover { transform: translateY(-3px); }
 
         .ticket-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
-            margin-bottom: 12px;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
         }
 
         .ticket-badge {
-            padding: 5px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 800;
         }
 
         .status-open { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid #3498db; }
 
-        .btn-action-submit {
-            width: 100%;
+        /* Chat / Replies Section */
+        .chat-thread-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             padding: 12px;
-            background: linear-gradient(135deg, var(--purple-primary) 0%, var(--purple-dark) 100%);
+            margin-top: 12px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .chat-msg {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+        }
+
+        .chat-msg.admin {
+            background: rgba(124, 92, 255, 0.25);
+            border-right: 3px solid var(--purple-primary);
+        }
+
+        .chat-msg.user {
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 3px solid #718093;
+        }
+
+        .chat-reply-inputs {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chat-reply-inputs input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .btn-reply-send {
+            background: var(--purple-primary);
             color: #fff;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-weight: 800;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Direct Action Buttons */
+        .btn-action-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--purple-primary) 0%, #4834d4 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-action-submit:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(124, 92, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(124, 92, 255, 0.6);
+        }
+
+        .btn-danger-clear {
+            background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
         footer {
@@ -492,12 +559,6 @@
         <div class="loader-bar-container">
             <div class="loader-bar-fill"></div>
         </div>
-    </div>
-
-    <!-- Login Intro -->
-    <div id="login-intro-overlay">
-        <div class="login-intro-title">Welcome to Nova City</div>
-        <div class="login-intro-role" id="login-role-text">(Member)</div>
     </div>
 
     <!-- Transition Overlay -->
@@ -593,7 +654,11 @@
 
                 <form id="apply-form-element" onsubmit="handleApplicationSubmit(event)">
                     <div id="dynamic-apply-fields"></div>
-                    <button type="submit" class="btn-action-submit" style="margin-top: 15px;">إرسال طلب التقديم</button>
+                    
+                    <!-- Send Application Button -->
+                    <button type="submit" class="btn-action-submit" style="margin-top: 20px;">
+                        <i class="fa-solid fa-paper-plane"></i> إرسال طلب التقديم الآن
+                    </button>
                 </form>
             </div>
         </section>
@@ -643,14 +708,17 @@
                         <textarea id="ticket-details-input" rows="4" placeholder="اكتب تفاصيل طلبك أو استفسارك هنا..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn-action-submit">إنشاء التذكرة الآن</button>
+                    <!-- Send Ticket Button -->
+                    <button type="submit" class="btn-action-submit">
+                        <i class="fa-solid fa-paper-plane"></i> إرسال وإنشاء التذكرة الآن
+                    </button>
                 </form>
             </div>
         </section>
 
         <!-- General User Tickets View -->
         <section id="user-tickets" class="page-section">
-            <h2 style="margin-bottom: 20px;"><i class="fa-solid fa-ticket"></i> تذاكري المفتوحة</h2>
+            <h2 style="margin-bottom: 20px;"><i class="fa-solid fa-ticket"></i> التذاكر المفتوحة وتفاصيل المحادثة</h2>
             <div class="tickets-container" id="user-general-tickets-list"></div>
         </section>
 
@@ -665,37 +733,54 @@
             <div class="editable-content-box" id="partners-content-display"></div>
         </section>
 
-        <!-- Admin Control Panel -->
+        <!-- Advanced Admin Control Panel -->
         <section id="admin-panel" class="page-section">
-            <h2 style="color: #ff4757; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية للإدارة العليا</h2>
+            <h2 style="color: #ff4757; margin-bottom: 25px;"><i class="fa-solid fa-user-shield"></i> لوحة التحكم المركزية والإدارة المباشرة</h2>
 
-            <div style="margin-bottom: 30px;">
-                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-folder-open"></i> إدارة التذاكر العامة</h3>
-                <div class="tickets-container" id="admin-general-tickets-list"></div>
+            <!-- Split Two-Column Layout -->
+            <div class="admin-split-grid">
+                <!-- Right Side: Application Tickets -->
+                <div class="admin-column-box">
+                    <div class="admin-column-header">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>تذاكر التقديمات (الجهة اليمنى)</span>
+                    </div>
+                    <div class="tickets-container" id="admin-app-tickets-list"></div>
+                </div>
+
+                <!-- Left Side: General Tickets & Live Support -->
+                <div class="admin-column-box">
+                    <div class="admin-column-header">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>التذاكر العامة والدعم الفني (الجهة اليسرى)</span>
+                    </div>
+                    <div class="tickets-container" id="admin-general-tickets-list"></div>
+                </div>
             </div>
 
-            <div style="margin-bottom: 30px;">
-                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-id-card"></i> إدارة تذاكر التقديمات</h3>
-                <div class="tickets-container" id="admin-app-tickets-list"></div>
-            </div>
-
-            <!-- Content Management -->
+            <!-- Content Management System -->
             <div class="editable-content-box" style="margin-bottom: 30px;">
-                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-pen-to-square"></i> التعديل المباشر على محتوى الموقع</h3>
+                <h3 style="color: var(--purple-glow); margin-bottom: 15px;"><i class="fa-solid fa-pen-to-square"></i> التعديل والحذف الفعلي لمحتوى الموقع</h3>
                 
                 <div class="form-group">
                     <label>تعديل القوانين (Rules):</label>
                     <textarea id="edit-rules-input" rows="4"></textarea>
+                    <button class="btn-danger-clear" onclick="clearContent('rules')"><i class="fa-solid fa-trash"></i> مسح القوانين بالكامل</button>
                 </div>
                 <div class="form-group">
                     <label>تعديل المعلومات العامة (General Info):</label>
                     <textarea id="edit-info-input" rows="4"></textarea>
+                    <button class="btn-danger-clear" onclick="clearContent('info')"><i class="fa-solid fa-trash"></i> مسح المعلومات بالكامل</button>
                 </div>
                 <div class="form-group">
                     <label>تعديل الشراكات (Partners):</label>
                     <textarea id="edit-partners-input" rows="3"></textarea>
+                    <button class="btn-danger-clear" onclick="clearContent('partners')"><i class="fa-solid fa-trash"></i> مسح الشراكات بالكامل</button>
                 </div>
-                <button class="btn-action-submit" onclick="saveSiteContentChanges()">حفظ وتحديث المحتوى على السيرفر فوراً</button>
+                
+                <button class="btn-action-submit" onclick="saveSiteContentChanges()" style="margin-top: 15px;">
+                    <i class="fa-solid fa-floppy-disk"></i> حفظ وتثبيت التعديلات على الموقع لجميع الزوار فوراً
+                </button>
             </div>
         </section>
     </main>
@@ -706,7 +791,7 @@
         <div class="powered-by">Powered by MMH</div>
     </footer>
 
-    <!-- JavaScript Architecture -->
+    <!-- JavaScript Engine -->
     <script>
         // WEBHOOKS CONFIGURATION BY CATEGORY
         const WEBHOOKS = {
@@ -735,9 +820,9 @@
             tickets: JSON.parse(localStorage.getItem('nova_general_tickets') || '[]'),
             applications: JSON.parse(localStorage.getItem('nova_applications') || '[]'),
             siteData: JSON.parse(localStorage.getItem('nova_site_content') || JSON.stringify({
-                rules: "قوانين سيرفر نوفا سيتي رول بلاي:\n1. يمنع منعاً باتاً RDM و VDM.\n2. الالتزام الكامل بتمثيل الشخصية داخل السيرفر.\n3. احترام جميع الأعضاء والإدارة.",
+                rules: "1. يمنع منعاً باتاً RDM و VDM.\n2. الالتزام الكامل بتمثيل الشخصية داخل السيرفر.\n3. احترام جميع الأعضاء والإدارة.",
                 info: "مدينة نوفا هي أول مدينة عربية واقعية تنشأ داخل عالم ماينكرافت الجافا، حيث تقدم تجربة رول بلاي متكاملة.",
-                partners: "شراكات نوفا سيتي: Coming Soon (K) 🔥"
+                partners: "شراكات نوفا سيتي الرسمية 🔥"
             }))
         };
 
@@ -756,7 +841,7 @@
             }
         });
 
-        // Send Embed Message to Discord Webhook
+        // Send Message Embed to Discord Webhook
         async function sendDiscordWebhook(webhookUrl, embedData) {
             try {
                 const response = await fetch(webhookUrl, {
@@ -775,7 +860,6 @@
             }
         }
 
-        // Discord OAuth Login
         function initiateDiscordLogin() {
             const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=identify`;
             window.location.href = oauthUrl;
@@ -809,7 +893,6 @@
             }
         }
 
-        // Admin Auth
         function openAdminModal() { document.getElementById('admin-pass-modal').style.display = 'flex'; }
         function closeAdminModal() { document.getElementById('admin-pass-modal').style.display = 'none'; }
 
@@ -826,7 +909,6 @@
             }
         }
 
-        // Navigation
         function switchTabWithTransition(tabId) {
             const overlay = document.getElementById('transition-overlay');
             overlay.style.display = 'flex';
@@ -851,10 +933,11 @@
             if (tabId === 'admin-panel') renderAdminPanel();
         }
 
+        // Render & Save Content Modifications
         function renderSiteContent() {
-            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules}</p>`;
-            document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.info}</p>`;
-            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.partners}</p>`;
+            document.getElementById('rules-content-display').innerHTML = `<h2><i class="fa-solid fa-book"></i> قوانين المدينة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.rules || 'لا توجد قوانين مسجلة حالياً.'}</p>`;
+            document.getElementById('info-content-display').innerHTML = `<h2><i class="fa-solid fa-circle-info"></i> معلومات عامة</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.info || 'لا توجد معلومات عامة حالياً.'}</p>`;
+            document.getElementById('partners-content-display').innerHTML = `<h2><i class="fa-solid fa-handshake"></i> الشراكات</h2><p style="white-space: pre-line; margin-top:15px;">${state.siteData.partners || 'لا توجد شراكات مسجلة حالياً.'}</p>`;
 
             document.getElementById('edit-rules-input').value = state.siteData.rules;
             document.getElementById('edit-info-input').value = state.siteData.info;
@@ -869,7 +952,17 @@
 
             localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
             renderSiteContent();
-            alert("تم تحديث محتوى الموقع بنجاح!");
+            alert("تم حفظ المحتوى المعدل ونشره بجميع أجزاء الموقع!");
+        }
+
+        function clearContent(section) {
+            if (!state.isAdmin) return;
+            if (confirm("هل أنت تأكد من إزالة ومسح هذا النص بالكامل من الموقع؟")) {
+                state.siteData[section] = "";
+                localStorage.setItem('nova_site_content', JSON.stringify(state.siteData));
+                renderSiteContent();
+                alert("تم حذف النص بالكامل بجد!");
+            }
         }
 
         function selectTicketCategory(element, category) {
@@ -883,7 +976,7 @@
             document.getElementById('manual-auth-inputs').style.display = method === 'manual' ? 'block' : 'none';
         }
 
-        // Handle General Ticket Submission
+        // Submitting General Ticket
         async function handleGeneralTicketSubmit(e) {
             e.preventDefault();
             if (!state.selectedCategory) {
@@ -919,16 +1012,15 @@
                 username: username,
                 details: details,
                 status: 'مفتوحة (قيد المراجعة)',
-                date: new Date().toLocaleString('ar-EG')
+                date: new Date().toLocaleString('ar-EG'),
+                replies: []
             };
 
             state.tickets.push(newTicket);
             localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
 
-            // Select Target Webhook
             const targetWebhook = WEBHOOKS[state.selectedCategory] || WEBHOOKS["default"];
 
-            // Send to Discord
             const embedData = {
                 title: `🎫 تذكرة جديدة: ${newTicket.category}`,
                 color: 8133887,
@@ -944,9 +1036,34 @@
 
             await sendDiscordWebhook(targetWebhook, embedData);
 
-            alert(`تم فتح تذكرتك بنجاح وإرسالها للسيرفر!\nرقم التذكرة: ${newTicket.id}`);
+            alert(`تم إرسال تذكرتك بنجاح وبشكل تام للديسكورد والموقع!\nرقم التذكرة: ${newTicket.id}`);
             e.target.reset();
             switchTabWithTransition('user-tickets');
+        }
+
+        // Interactive Reply System inside Tickets
+        function sendReplyToTicket(ticketId, isFromAdmin) {
+            const inputId = isFromAdmin ? `admin-reply-${ticketId}` : `user-reply-${ticketId}`;
+            const inputElem = document.getElementById(inputId);
+            const msgText = inputElem.value.trim();
+
+            if (!msgText) return;
+
+            const ticket = state.tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                ticket.replies.push({
+                    sender: isFromAdmin ? 'الإدارة (Admin)' : ticket.username,
+                    isAdmin: isFromAdmin,
+                    text: msgText,
+                    time: new Date().toLocaleTimeString('ar-EG')
+                });
+
+                localStorage.setItem('nova_general_tickets', JSON.stringify(state.tickets));
+                inputElem.value = '';
+
+                if (isFromAdmin) renderAdminPanel();
+                else renderUserGeneralTickets();
+            }
         }
 
         function renderUserGeneralTickets() {
@@ -958,21 +1075,36 @@
             container.innerHTML = myTickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد لديك تذاكر مفتوحة.</p>' : '';
 
             myTickets.forEach(t => {
+                let repliesHtml = '';
+                t.replies.forEach(r => {
+                    repliesHtml += `<div class="chat-msg ${r.isAdmin ? 'admin' : 'user'}"><strong>${r.sender}:</strong> ${r.text} <span style="font-size:0.7rem; color:#aaa;">(${r.time})</span></div>`;
+                });
+
                 container.innerHTML += `
                     <div class="ticket-card">
                         <div class="ticket-header">
                             <div>
                                 <h3 style="color:var(--purple-glow);">${t.category} (${t.id})</h3>
-                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date} | المستخدم: ${t.username}</span>
+                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date}</span>
                             </div>
                             <span class="ticket-badge status-open">${t.status}</span>
                         </div>
-                        <p style="margin-top:10px; font-size:0.95rem;">${t.details}</p>
+                        <p style="margin-top:10px; font-size:0.95rem;"><strong>الطلب الأصلي:</strong> ${t.details}</p>
+                        
+                        <div class="chat-thread-box">
+                            <strong style="color:var(--purple-glow); display:block; margin-bottom:8px;">محادثة التذكرة:</strong>
+                            ${repliesHtml || '<p style="color:#888; font-size:0.8rem;">لا توجد ردود بعد.</p>'}
+                        </div>
+
+                        <div class="chat-reply-inputs">
+                            <input type="text" id="user-reply-${t.id}" placeholder="اكتب ردك هنا...">
+                            <button class="btn-reply-send" onclick="sendReplyToTicket('${t.id}', false)">إرسال الرد</button>
+                        </div>
                     </div>`;
             });
         }
 
-        // Application Forms
+        // Application Forms Setup
         function toggleApplyFormType() { setupApplyFormFields(); }
 
         function setupApplyFormFields() {
@@ -981,17 +1113,17 @@
 
             if (type === 'admin') {
                 container.innerHTML = `
-                    <div class="form-group"><label>الاسم الحقيقي:</label><input type="text" id="app-name" required></div>
-                    <div class="form-group"><label>السن:</label><input type="number" id="app-age" required></div>
-                    <div class="form-group"><label>الخبرات السابقة بالإدارة:</label><input type="text" id="app-exp" required></div>
-                    <div class="form-group"><label>ساعات التواجد اليومية:</label><input type="number" id="app-hours" required></div>
+                    <div class="form-group"><label>الاسم الحقيقي بالكامل:</label><input type="text" id="app-name" required></div>
+                    <div class="form-group"><label>العمر:</label><input type="number" id="app-age" required></div>
+                    <div class="form-group"><label>الخبرات الإدارية السابقة والتفاصيل:</label><textarea id="app-exp" rows="3" required></textarea></div>
+                    <div class="form-group"><label>عدد ساعات التواجد اليومية:</label><input type="number" id="app-hours" required></div>
                 `;
             } else {
                 container.innerHTML = `
                     <div class="form-group"><label>الاسم الحقيقي:</label><input type="text" id="app-name" required></div>
                     <div class="form-group"><label>المنصة (YouTube/Kick/TikTok/Twitch):</label><input type="text" id="app-platform" required></div>
                     <div class="form-group"><label>عدد المتابعين:</label><input type="number" id="app-followers" required></div>
-                    <div class="form-group"><label>رابط الحساب / اليوزر:</label><input type="text" id="app-handle" required></div>
+                    <div class="form-group"><label>رابط الحساب / قناتك:</label><input type="text" id="app-handle" required></div>
                 `;
             }
         }
@@ -1006,6 +1138,19 @@
             const type = document.getElementById('apply-type-select').value;
             const name = document.getElementById('app-name').value;
 
+            let answers = [];
+            if (type === 'admin') {
+                answers.push({ q: "الاسم", a: name });
+                answers.push({ q: "العمر", a: document.getElementById('app-age').value });
+                answers.push({ q: "الخبرات الإدارية", a: document.getElementById('app-exp').value });
+                answers.push({ q: "ساعات التواجد", a: document.getElementById('app-hours').value });
+            } else {
+                answers.push({ q: "الاسم", a: name });
+                answers.push({ q: "المنصة", a: document.getElementById('app-platform').value });
+                answers.push({ q: "عدد المتابعين", a: document.getElementById('app-followers').value });
+                answers.push({ q: "رابط الحساب", a: document.getElementById('app-handle').value });
+            }
+
             const newApp = {
                 id: 'APP-' + Date.now().toString().slice(-6),
                 type: type === 'admin' ? 'تقديم إدارة' : 'تقديم ستريمر',
@@ -1013,13 +1158,13 @@
                 username: state.currentUser.username,
                 applicantName: name,
                 status: 'قيد المراجعة',
-                date: new Date().toLocaleString('ar-EG')
+                date: new Date().toLocaleString('ar-EG'),
+                answers: answers
             };
 
             state.applications.push(newApp);
             localStorage.setItem('nova_applications', JSON.stringify(state.applications));
 
-            // Send Application via Webhook
             const embedData = {
                 title: `📝 تقديم جديد: ${newApp.type}`,
                 color: 16738743,
@@ -1034,7 +1179,7 @@
 
             await sendDiscordWebhook(WEBHOOKS["default"], embedData);
 
-            alert("تم إرسال طلب التقديم بنجاح وإشعاره بالديسكورد!");
+            alert("تم إرسال طلب التقديم بنجاح بالكامل!");
             e.target.reset();
             switchTabWithTransition('app-tickets');
         }
@@ -1048,6 +1193,8 @@
             container.innerHTML = myApps.length === 0 ? '<p style="color:#a0a0c0;">لا توجد طلبات تقديم مرفوعة.</p>' : '';
 
             myApps.forEach(a => {
+                let answersHtml = (a.answers || []).map(ans => `<p><strong>${ans.q}:</strong> ${ans.a}</p>`).join('');
+
                 container.innerHTML += `
                     <div class="ticket-card">
                         <div class="ticket-header">
@@ -1057,43 +1204,64 @@
                             </div>
                             <span class="ticket-badge status-open">${a.status}</span>
                         </div>
-                        <p style="margin-top:5px;">مقدم الطلب: ${a.applicantName} (${a.username})</p>
+                        <div style="margin-top:10px;">${answersHtml}</div>
                     </div>`;
             });
         }
 
+        // Split Admin Control Panel Rendering
         function renderAdminPanel() {
             if (!state.isAdmin) return;
 
-            const genContainer = document.getElementById('admin-general-tickets-list');
-            genContainer.innerHTML = state.tickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر دعم عامة.</p>' : '';
-
-            state.tickets.forEach((t, index) => {
-                genContainer.innerHTML += `
-                    <div class="ticket-card">
-                        <div class="ticket-header">
-                            <div>
-                                <h3>${t.category} | ${t.username} (${t.userId})</h3>
-                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${t.date}</span>
-                            </div>
-                            <span class="ticket-badge status-open">${t.status}</span>
-                        </div>
-                        <p style="margin: 10px 0;">${t.details}</p>
-                    </div>`;
-            });
-
+            // Render Applications (Right Side)
             const appContainer = document.getElementById('admin-app-tickets-list');
-            appContainer.innerHTML = state.applications.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر تقديمات.</p>' : '';
+            appContainer.innerHTML = state.applications.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تقديمات بانتظار العرض.</p>' : '';
 
-            state.applications.forEach((a, index) => {
+            state.applications.forEach(a => {
+                let answersHtml = (a.answers || []).map(ans => `<p style="font-size:0.85rem;"><strong>${ans.q}:</strong> ${ans.a}</p>`).join('');
+
                 appContainer.innerHTML += `
                     <div class="ticket-card">
                         <div class="ticket-header">
                             <div>
-                                <h3>${a.type} | ${a.applicantName} (${a.username})</h3>
-                                <span style="font-size:0.85rem; color:#aaa;">التاريخ: ${a.date}</span>
+                                <h4 style="color:var(--gold-accent);">${a.type} - ${a.applicantName}</h4>
+                                <span style="font-size:0.75rem; color:#aaa;">اسم الحساب: ${a.username} | ID: ${a.userId}</span>
                             </div>
                             <span class="ticket-badge status-open">${a.status}</span>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.3); padding:10px; border-radius:8px;">${answersHtml}</div>
+                    </div>`;
+            });
+
+            // Render General Tickets & Support Chat (Left Side)
+            const genContainer = document.getElementById('admin-general-tickets-list');
+            genContainer.innerHTML = state.tickets.length === 0 ? '<p style="color:#a0a0c0;">لا توجد تذاكر دعم عامة.</p>' : '';
+
+            state.tickets.forEach(t => {
+                let repliesHtml = '';
+                (t.replies || []).forEach(r => {
+                    repliesHtml += `<div class="chat-msg ${r.isAdmin ? 'admin' : 'user'}"><strong>${r.sender}:</strong> ${r.text} <span style="font-size:0.7rem; color:#aaa;">(${r.time})</span></div>`;
+                });
+
+                genContainer.innerHTML += `
+                    <div class="ticket-card">
+                        <div class="ticket-header">
+                            <div>
+                                <h4 style="color:var(--purple-glow);">${t.category} (${t.id})</h4>
+                                <span style="font-size:0.75rem; color:#aaa;">المرسل: ${t.username} | ID: ${t.userId}</span>
+                            </div>
+                            <span class="ticket-badge status-open">${t.status}</span>
+                        </div>
+                        <p style="font-size:0.88rem; margin:8px 0;"><strong>الطلب:</strong> ${t.details}</p>
+                        
+                        <div class="chat-thread-box">
+                            <strong style="color:var(--purple-glow); font-size:0.8rem; display:block; margin-bottom:5px;">سجل المحادثة:</strong>
+                            ${repliesHtml || '<p style="color:#888; font-size:0.75rem;">لا توجد ردود جديدة.</p>'}
+                        </div>
+
+                        <div class="chat-reply-inputs">
+                            <input type="text" id="admin-reply-${t.id}" placeholder="اكتب ردك كـ إداري...">
+                            <button class="btn-reply-send" onclick="sendReplyToTicket('${t.id}', true)">رد كـ أدمن</button>
                         </div>
                     </div>`;
             });
