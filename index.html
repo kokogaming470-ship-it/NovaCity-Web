@@ -40,7 +40,7 @@
             position: relative;
         }
 
-        /* Background Particle Canvas */
+        /* Canvas particles */
         #bg-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -49,7 +49,7 @@
             pointer-events: none;
         }
 
-        /* Initial Ultra Cinematic Intro */
+        /* Main Cinematic Intro */
         #site-main-intro {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -100,7 +100,7 @@
             100% { transform: scale(1.15); opacity: 0; filter: blur(15px); }
         }
 
-        /* Admin Specific Intro Overlay */
+        /* Admin Intro Overlay */
         #admin-intro-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -119,7 +119,7 @@
             opacity: 1;
         }
 
-        /* Header Navigation Layout */
+        /* Header Navigation */
         header {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -177,18 +177,25 @@
             transform: translateY(-2px);
         }
 
+        /* User Auth Component */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .btn-auth {
             background: linear-gradient(135deg, #5865F2 0%, #404EED 100%);
             color: #fff;
             border: none;
-            padding: 9px 16px;
+            padding: 9px 18px;
             border-radius: 12px;
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
             white-space: nowrap;
         }
@@ -196,6 +203,47 @@
         .btn-auth:hover {
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(88, 101, 242, 0.8);
+        }
+
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(88, 101, 242, 0.15);
+            border: 1px solid rgba(88, 101, 242, 0.5);
+            padding: 6px 14px;
+            border-radius: 30px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--purple-glow);
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger-color);
+            color: #fff;
         }
 
         /* Modal Popups */
@@ -263,7 +311,7 @@
             box-shadow: 0 0 35px rgba(0, 240, 255, 0.3);
         }
 
-        /* Support Discord Button */
+        /* Discord Support Button */
         .btn-discord-support {
             display: inline-flex;
             align-items: center;
@@ -430,6 +478,7 @@
             .admin-split-grid { grid-template-columns: 1fr; }
             .intro-logo-glow { font-size: 2.3rem; }
             .intro-sub-text { font-size: 1rem; }
+            .auth-container { justify-content: center; }
         }
 
         footer {
@@ -446,7 +495,7 @@
     <!-- Particle Background Canvas -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- Ultra Cinematic Intro Animation (Triggers On Site Load) -->
+    <!-- Ultra Cinematic Intro Animation -->
     <div id="site-main-intro">
         <div class="intro-content-box">
             <div class="intro-logo-glow">WELCOME TO NOVA CITY</div>
@@ -454,7 +503,7 @@
         </div>
     </div>
 
-    <!-- Admin Intro Animation Overlay -->
+    <!-- Admin Intro Overlay -->
     <div id="admin-intro-overlay">
         <div style="font-size: 2.8rem; font-weight: 900; color: var(--purple-glow); text-shadow: 0 0 30px var(--pink-glow);">WELCOME TO NOVA CITY CONTROL PANEL</div>
         <p style="color: #fff; margin-top: 15px; font-weight: 700;">جاري تحميل نظام الإدارة العليا...</p>
@@ -494,11 +543,13 @@
             <button class="nav-btn" id="admin-logs-nav-btn" onclick="switchTab('admin-logs')" style="display: none; color: var(--gold-accent);"><i class="fa-solid fa-box-archive"></i> سجل البيانات</button>
         </nav>
 
-        <!-- Discord Real OAuth2 Authorization Button -->
-        <button class="btn-auth" id="discord-auth-btn" onclick="redirectToDiscordOAuth()">
-            <i class="fa-brands fa-discord"></i>
-            <span id="auth-btn-text">ربط حساب الديسكورد</span>
-        </button>
+        <!-- Discord User Auth Area -->
+        <div class="auth-container" id="discord-auth-container">
+            <button class="btn-auth" id="discord-login-btn" onclick="redirectToDiscordOAuth()">
+                <i class="fa-brands fa-discord" style="font-size:1.2rem;"></i>
+                <span>تسجيل الدخول بـ Discord</span>
+            </button>
+        </div>
     </header>
 
     <main>
@@ -510,11 +561,11 @@
                     أحسن سيرفر رول بلاي في مصر
                 </p>
 
-                <!-- Discord Support Button -->
+                <!-- Official Discord Support Button Link -->
                 <div>
-                    <a href="YOUR_DISCORD_SERVER_INVITE_URL_HERE" target="_blank" class="btn-discord-support">
+                    <a href="https://discord.gg/Hy7heMc7F" target="_blank" class="btn-discord-support">
                         <i class="fa-brands fa-discord" style="font-size: 1.5rem;"></i>
-                        <span>التواصل مع الدعم الفني</span>
+                        <span>انضم لسيرفر الدعم الفني بالديسكورد</span>
                     </a>
                 </div>
             </div>
@@ -677,8 +728,7 @@
     <script>
         const CONFIG = {
             ADMIN_PASSWORD: "997816",
-            // ضع Client ID الخاص بتطبيقك في ديسكورد هنا
-            DISCORD_CLIENT_ID: "YOUR_DISCORD_CLIENT_ID_HERE", 
+            DISCORD_CLIENT_ID: "1525287436198875266", 
             REDIRECT_URI: window.location.href.split('#')[0].split('?')[0]
         };
 
@@ -706,9 +756,7 @@
             if (state.isAdmin) {
                 enableAdminUI();
             }
-            if (state.currentUser) {
-                updateAuthUI();
-            }
+            updateAuthUI();
         });
 
         /* Site Main Intro Controller */
@@ -773,20 +821,10 @@
             animate();
         }
 
-        /* Discord Real OAuth2 Authentication */
+        /* Real Discord OAuth2 Login Engine */
         function redirectToDiscordOAuth() {
-            if (CONFIG.DISCORD_CLIENT_ID === "YOUR_DISCORD_CLIENT_ID_HERE") {
-                // Fallback for immediate test
-                const username = prompt("أدخل اسم حساب الديسكورد للتجربة الفورية (أو استبدل Client ID بالسيرفر):");
-                if (username) {
-                    state.currentUser = { id: 'DISC-' + Math.floor(Math.random() * 89999 + 10000), username: username };
-                    localStorage.setItem('nova_user_data', JSON.stringify(state.currentUser));
-                    updateAuthUI();
-                }
-                return;
-            }
-
-            const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=identify`;
+            const scope = encodeURIComponent('identify guilds.join');
+            const oauthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CONFIG.DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(CONFIG.REDIRECT_URI)}&response_type=token&scope=${scope}`;
             window.location.href = oauthUrl;
         }
 
@@ -800,20 +838,48 @@
                 })
                 .then(res => res.json())
                 .then(user => {
-                    if (user && user.username) {
-                        state.currentUser = { id: user.id, username: `${user.username}#${user.discriminator || '0'}` };
+                    if (user && user.id) {
+                        const avatarUrl = user.avatar 
+                            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+                            : `https://cdn.discordapp.com/embed/avatars/${(user.discriminator || 0) % 5}.png`;
+
+                        state.currentUser = {
+                            id: user.id,
+                            username: user.global_name || user.username,
+                            avatar: avatarUrl
+                        };
                         localStorage.setItem('nova_user_data', JSON.stringify(state.currentUser));
                         updateAuthUI();
                         window.location.hash = '';
                     }
                 })
-                .catch(err => console.error("OAuth error:", err));
+                .catch(err => console.error("Discord Auth Error:", err));
             }
         }
 
+        function logoutUser() {
+            state.currentUser = null;
+            localStorage.removeItem('nova_user_data');
+            updateAuthUI();
+        }
+
         function updateAuthUI() {
+            const container = document.getElementById('discord-auth-container');
             if (state.currentUser) {
-                document.getElementById('auth-btn-text').innerText = `${state.currentUser.username}`;
+                container.innerHTML = `
+                    <div class="user-profile-badge">
+                        <img src="${state.currentUser.avatar}" class="user-avatar" alt="Avatar">
+                        <span class="user-name">${state.currentUser.username}</span>
+                        <button class="btn-logout" onclick="logoutUser()" title="تسجيل الخروج"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button class="btn-auth" onclick="redirectToDiscordOAuth()">
+                        <i class="fa-brands fa-discord" style="font-size:1.2rem;"></i>
+                        <span>تسجيل الدخول بـ Discord</span>
+                    </button>
+                `;
             }
         }
 
@@ -1142,6 +1208,7 @@
         async function sendAdminWebhookMsg() {
             if (!state.isAdmin) return;
             const webhookUrl = document.getElementById('custom-webhook-url').value.trim();
+do {
             const title = document.getElementById('bot-msg-title').value.trim();
             const content = document.getElementById('bot-msg-content').value.trim();
 
